@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>#playername#</title>
+<script src="jquery-1.10.2.min.js"></script>
+<script src="moment-2.4.0.min.js"></script>
+<script src="purl-024fe0.js"></script>
+<script src="ps2-killboard.js"></script>
+<script src="ps2-player.js"></script>
+<script>
+$(function() {
+	var character_id = $.url().param('character_id')
+	
+	if(!character_id)
+		return;
+	
+	killboard.init($('#killboard'), character_id);
+	player.init($('#player'));
+	
+	player.update(character_id);
+});
+</script>
+<style>
+body {
+	background-color: #000;
+	color: #fff;
+}
+table {
+	background-color: #031D1E;
+	border-collapse: collapse;
+}
+thead {
+	background-color: #073E44;
+}
+th, td {
+	border-left: 1px solid #094A4E;
+	border-right: 1px solid #094A4E;
+	border-bottom: 1px solid #094A4E;
+	padding: 4px 6px;
+}
+td.br, td.kd, td.spm, td.kpm, #stats td {
+	text-align: right;
+}
+tr.deaths {
+	background-color: #021112;
+}
+tr.vs td.event {
+	background-color: #a0a;
+}
+tr.nc td.event {
+	background-color: #00a;
+}
+tr.tr td.event {
+	background-color: #a00;
+}
+tr.deaths td.event {
+	opacity: 0.5;
+}
+tr.headshot td.method:last-child:after {
+	content: " (HS)";
+	color: #ccc;
+	font-size: 0.9em;
+}
+tr.suicide td.method:last-child:after {
+	content: " (Suicide)";
+	color: #c00;
+	font-size: 0.9em;
+}
+span.vehicle {
+	color: #00EAFF;
+}
+span.weapon + span.vehicle:before {
+	content: " (";
+}
+span.weapon + span.vehicle:after {
+	content: ")";
+}
+a {
+	color: #fff;
+	text-decoration: none;
+}
+#killboard {
+	float: left;
+	padding-right: 10px;
+}
+#player {
+}
+label {
+	display: block;
+	padding-bottom: 5px;
+}
+</style>
+</head>
+<body>
+<div id="killboard">
+</div>
+<div id="player">
+	<label id="name">Name: <span></span></label>
+	<label id="outfit">Outfit: <span></span></label>
+	<label id="br">BR: <span></span></label>
+	<table id="stats">
+		<thead>
+			<tr>
+				<th>&nbsp;</th>
+				<th>Played</th>
+				<th>Score</th>
+				<th>Kills</th>
+				<th>Deaths</th>
+				<th>K/D</th>
+				<th>SPM</th>
+				<th>KPM</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr id="stats_overall"><th>Overall</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+			<tr id="stats_monthly"><th>Monthly</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+			<tr id="stats_weekly"><th>Weekly</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+			<tr id="stats_daily"><th>Daily</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+		</tbody>
+	</table>
+</div>
+</body>
+</html>
