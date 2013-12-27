@@ -125,7 +125,7 @@ var player = new function player() {
 			}
 		});
 		
-		self.$lastupdate.text(moment.unix(stats.score.last_save).format("MMM D, HH:mm:ss"));
+		self.$lastupdate.text(moment.unix(stats.score.last_save*1 + 28800).format("MMM D, HH:mm:ss"));
 	}
 	
 	return {
