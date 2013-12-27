@@ -35,7 +35,7 @@ var killboard = new function killboard() {
 
 	var buildKillboardEvent = function buildKillboardEvent(idx, event) {
 		var type = event.table_type;
-		var date = new Date(event.timestamp * 1000);
+		var timestamp = event.timestamp;
 		var character = event.character;
 		if(type === 'deaths') {
 			character = event.attacker_character;
@@ -74,7 +74,7 @@ var killboard = new function killboard() {
 			}
 		}
 		
-		$tr.append('<td class="time">' + buildTimeInfo(date) + '</td>');
+		$tr.append('<td class="time">' + buildTimeInfo(timestamp) + '</td>');
 		$tr.append('<td class="event">&nbsp;</td>');
 		$tr.append('<td class="name">' + buildPlayerInfo(character) + '</td>');
 		$tr.append('<td class="br">' + buildBR(character) + '</td>');
@@ -87,8 +87,8 @@ var killboard = new function killboard() {
 		$tr.appendTo(self.$tbody);
 	};
 
-	var buildTimeInfo = function buildTimeInfo(date) {
-		return moment(date).format("MMM D, HH:mm:ss");
+	var buildTimeInfo = function buildTimeInfo(timestamp) {
+		return moment.unix(timestamp).format("MMM D, HH:mm:ss");
 	};
 
 	var buildPlayerInfo = function buildPlayerInfo(character) {

@@ -82,20 +82,50 @@ var player = new function player() {
 		}
 		
 		$.each(self.$container.find('#stats_overall').find('td'), function(idx, td) {
-			$(td).text(stats2[0][idx]);
+			var value = stats2[0][idx];
+			if(idx === 0) {
+				var duration = moment.duration(value*1000)
+				$(td).text(duration.format());
+			}
+			else {
+				$(td).text(value);
+			}
 		});
 		
 		$.each(self.$container.find('#stats_monthly').find('td'), function(idx, td) {
-			$(td).text(stats2[1][idx]);
+			var value = stats2[1][idx];
+			if(idx === 0) {
+				var duration = moment.duration(value*1000)
+				$(td).text(duration.format());
+			}
+			else {
+				$(td).text(value);
+			}
 		});
 		
 		$.each(self.$container.find('#stats_weekly').find('td'), function(idx, td) {
-			$(td).text(stats2[2][idx]);
+			var value = stats2[2][idx];
+			if(idx === 0) {
+				var duration = moment.duration(value*1000)
+				$(td).text(duration.format());
+			}
+			else {
+				$(td).text(value);
+			}
 		});
 		
 		$.each(self.$container.find('#stats_daily').find('td'), function(idx, td) {
-			$(td).text(stats2[3][idx]);
+			var value = stats2[3][idx];
+			if(idx === 0) {
+				var duration = moment.duration(value*1000)
+				$(td).text(duration.format());
+			}
+			else {
+				$(td).text(value);
+			}
 		});
+		
+		self.$lastupdate.text(moment.unix(stats.score.last_save).format("MMM D, HH:mm:ss"));
 	}
 	
 	return {
@@ -104,6 +134,7 @@ var player = new function player() {
 			self.$name = self.$container.find('#name').children('span')
 			self.$br = self.$container.find('#br').children('span')
 			self.$outfit = self.$container.find('#outfit').children('span')
+			self.$lastupdate = self.$container.find('#lastupdate').children('span')
 		}
 		,update: function update(character_id) {
 			var url = "http://census.soe.com/get/ps2:v2/character/?";

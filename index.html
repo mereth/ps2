@@ -8,6 +8,14 @@
 <script src="ps2-killboard.js"></script>
 <script src="ps2-player.js"></script>
 <script>
+moment.duration.fn.format = function(){
+	str = ""
+	if(this.days() > 0) str = str + Math.floor(this.days()) + "d "
+	if(this.hours() > 0) str = str + Math.floor(this.hours()) + "h "
+	if(this.minutes() > 0) str = str + Math.floor(this.minutes()) + "m "
+	if(this.seconds() > 0) str = str + Math.floor(this.seconds()) + "s "
+	return str
+}
 $(function() {
 	var character_id = $.url().param('character_id')
 	
@@ -118,6 +126,7 @@ label {
 			<tr id="stats_daily"><th>Daily</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
 		</tbody>
 	</table>
+	<label id="lastupdate">Last Update: <span></span></label>
 </div>
 </body>
 </html>
