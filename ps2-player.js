@@ -23,7 +23,7 @@ var player = new function player() {
 		var stats = character.characters_stat_history;
 		
 		var stats2 = [
-			[stats.time.all_time, stats.score.all_time, stats.kills.all_time, stats.deaths.all_time, 0, 0, 0]
+			[stats.time.all_time*1, stats.score.all_time*1, stats.kills.all_time*1, stats.deaths.all_time*1, 0, 0, 0]
 			,[0, 0, 0, 0, 0, 0, 0]
 			,[0, 0, 0, 0, 0, 0, 0]
 			,[0, 0, 0, 0, 0, 0, 0]
@@ -84,7 +84,7 @@ var player = new function player() {
 		$.each(self.$container.find('#stats_overall').find('td'), function(idx, td) {
 			var value = stats2[0][idx];
 			if(idx === 0) {
-				var duration = moment.duration(value*1000)
+				var duration = moment.duration(value, 's')
 				$(td).text(duration.format());
 			}
 			else {
@@ -95,7 +95,7 @@ var player = new function player() {
 		$.each(self.$container.find('#stats_monthly').find('td'), function(idx, td) {
 			var value = stats2[1][idx];
 			if(idx === 0) {
-				var duration = moment.duration(value*1000)
+				var duration = moment.duration(value, 's')
 				$(td).text(duration.format());
 			}
 			else {
@@ -106,7 +106,7 @@ var player = new function player() {
 		$.each(self.$container.find('#stats_weekly').find('td'), function(idx, td) {
 			var value = stats2[2][idx];
 			if(idx === 0) {
-				var duration = moment.duration(value*1000)
+				var duration = moment.duration(value, 's')
 				$(td).text(duration.format());
 			}
 			else {
@@ -117,7 +117,7 @@ var player = new function player() {
 		$.each(self.$container.find('#stats_daily').find('td'), function(idx, td) {
 			var value = stats2[3][idx];
 			if(idx === 0) {
-				var duration = moment.duration(value*1000)
+				var duration = moment.duration(value, 's')
 				$(td).text(duration.format());
 			}
 			else {

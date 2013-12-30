@@ -9,8 +9,9 @@
 <script src="ps2-player.js"></script>
 <script>
 moment.duration.fn.format = function(){
-	str = ""
-	if(this.days() > 0) str = str + Math.floor(this.days()) + "d "
+	var str = ""
+    var days = Math.floor(this.asDays())
+	if(days > 0) str = str + days + "d "
 	if(this.hours() > 0) str = str + Math.floor(this.hours()) + "h "
 	if(this.minutes() > 0) str = str + Math.floor(this.minutes()) + "m "
 	if(this.seconds() > 0) str = str + Math.floor(this.seconds()) + "s "
