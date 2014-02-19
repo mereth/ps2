@@ -98,13 +98,21 @@ label {
 	display: block;
 	padding-bottom: 5px;
 }
+.circle {
+	display: inline-block;
+	margin-left: 5px;
+	border-radius: 50%;
+	width: 10px;
+	height: 10px;
+	/* width and height can be anything, as long as they're equal */
+}
 </style>
 </head>
 <body>
 <div id="killboard">
 </div>
 <div id="player">
-	<label id="name">Name: <span></span></label>
+	<label id="name">Name: <span></span><span id='online' class="circle"> </span></label>
 	<label id="outfit">Outfit: <span></span></label>
 	<label id="br">BR: <span></span></label>
 	<table id="stats">

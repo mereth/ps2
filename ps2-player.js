@@ -20,6 +20,13 @@ var player = new function player() {
 		}
 		self.$br.text(character.battle_rank.value);
 		
+		if(character.characters_online_status.online_status == "1") {
+			$("#online").css('background-color', '#0f0');
+		}
+		else {
+			$("#online").css('background-color', '#f00');
+		}
+		
 		var stats = character.characters_stat_history;
 		
 		var stats2 = [
@@ -131,7 +138,7 @@ var player = new function player() {
 	return {
 		init: function init($container) {
 			self.$container = $container;
-			self.$name = self.$container.find('#name').children('span')
+			self.$name = self.$container.find('#name').find('span:first')
 			self.$br = self.$container.find('#br').children('span')
 			self.$outfit = self.$container.find('#outfit').children('span')
 			self.$lastupdate = self.$container.find('#lastupdate').children('span')
@@ -141,6 +148,7 @@ var player = new function player() {
 			url += "c:join=characters_stat_history^list:1^inject_at:characters_stat_history";
 			url += "&c:tree=start:characters_stat_history^field:stat_name";
 			url += "&c:join=outfit_member^on:character_id^inject_at:outfit_member(outfit^inject_at:outfit)";
+			url += "&c:join=characters_online_status^on:character_id^inject_at:characters_online_status^show:online_status"
 			url += "&callback=?";
 
 			$.getJSON(url, { character_id: character_id }, build);
