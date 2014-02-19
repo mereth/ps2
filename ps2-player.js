@@ -20,11 +20,11 @@ var player = new function player() {
 		}
 		self.$br.text(character.battle_rank.value);
 		
-		if(character.characters_online_status.online_status == "1") {
-			$("#online").css('background-color', '#0f0');
+		if(character.characters_online_status.online_status == "0") {
+			$("#online").css('background-color', '#f00');
 		}
 		else {
-			$("#online").css('background-color', '#f00');
+			$("#online").css('background-color', '#0f0');
 		}
 		
 		var stats = character.characters_stat_history;
