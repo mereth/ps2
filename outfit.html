@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>#outfitname#</title>
+<script src="//ajax.aspnetcdn.com/ajax/jQuery/jquery-2.1.1.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.3/moment.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/purl/2.3.1/purl.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js"></script>
+<script src="//ajax.aspnetcdn.com/ajax/knockout/knockout-3.1.0.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/knockout.mapping/2.4.1/knockout.mapping.min.js"></script>
+<script src="ps2-outfit.js"></script>
+<script src="ps2-player.js"></script>
+<script>
+</script>
+<style>
+body {
+	background-color: #000;
+	color: #fff;
+}
+table {
+	background-color: #031D1E;
+	border-collapse: collapse;
+}
+thead {
+	background-color: #073E44;
+}
+th, td {
+	border-left: 1px solid #094A4E;
+	border-right: 1px solid #094A4E;
+	border-bottom: 1px solid #094A4E;
+	padding: 4px 6px;
+}
+td.stat {
+	text-align: right;
+}
+
+a {
+	color: #fff;
+	text-decoration: none;
+}
+
+.circle {
+	display: inline-block;
+	margin-left: 5px;
+	border-radius: 50%;
+	width: 10px;
+	height: 10px;
+	/* width and height can be anything, as long as they're equal */
+}
+</style>
+<script>
+    moment.duration.fn.format = function(){
+	var str = ""
+    var days = Math.floor(this.asDays())
+	if(days > 0) str = str + days + "d "
+	if(this.hours() > 0) str = str + Math.floor(this.hours()) + "h "
+	if(this.minutes() > 0) str = str + Math.floor(this.minutes()) + "m "
+	if(this.seconds() > 0) str = str + Math.floor(this.seconds()) + "s "
+	return str
+}
+</script>
+</head>
+<body>
+<p>
+Name: <span data-bind="text: '[' + alias() + '] ', visible: alias()"></span><span data-bind="text: name"></span>
+</p>
+
+Statistics coverage: 
+<input type="radio" value="daily" data-bind="checked: period" /> Daily</div>
+<input type="radio" value="weekly" data-bind="checked: period" /> Weekly</div>
+<input type="radio" value="monthly" data-bind="checked: period" /> Monthly</div>
+<input type="radio" value="all_time" data-bind="checked: period" /> Overall</div>
+
+
+
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>BR</th>
+            <th>Rank</th>
+            <th>Played</th>
+            <th>Score</th>
+            <th>Kills</th>
+            <th>Deaths</th>
+            <th>K/D</th>
+            <th>SPM</th>
+            <th>KPM</th>
+            <th>LastUpdate</th>
+        </tr>
+    </thead>
+    <tbody data-bind="foreach: members">
+        <tr>
+            <td>
+                <span class="circle" data-bind="style: { backgroundColor: (characters_online_status.online_status == '0' ? '#f00' : '#0f0') }"></span>
+                <a data-bind="text: name.first, attr: { href: 'index.html?character_id=' + character_id }"></a>
+            </td>
+            <td data-bind="text: battle_rank.value"></td>
+            <td data-bind="text: rank"></td>
+            
+            <td class="stat" data-bind="text: moment.duration(filteredStatistics().time, 's').format()"></td>
+            <td class="stat" data-bind="text: filteredStatistics().score"></td>
+            <td class="stat" data-bind="text: filteredStatistics().kills"></td>
+            <td class="stat" data-bind="text: filteredStatistics().deaths"></td>
+            <td class="stat" data-bind="text: filteredStatistics().kdr"></td>
+            <td class="stat" data-bind="text: filteredStatistics().spm"></td>
+            <td class="stat" data-bind="text: filteredStatistics().kpm"></td>
+            <td data-bind="text: last_stats_update"></td>
+            
+        </tr>
+    </tbody>
+</table>
+</body>
+</html>
