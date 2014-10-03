@@ -92,8 +92,8 @@ Statistics coverage:
     <tbody data-bind="foreach: members">
         <tr>
             <td>
-                <span class="circle" data-bind="style: { backgroundColor: (characters_online_status.online_status == '0' ? '#f00' : '#0f0') }"></span>
-                <a data-bind="text: name.first, attr: { href: 'index.html?character_id=' + character_id }"></a>
+                <span class="circle" data-bind="style: { backgroundColor: (characters_online_status && characters_online_status.online_status == '0' ? '#f00' : '#0f0') }"></span>
+                <a data-bind="text: name.first, attr: { href: 'character.html?id=' + character_id }"></a>
             </td>
             <td data-bind="text: battle_rank.value"></td>
             <td data-bind="text: rank"></td>
@@ -110,5 +110,16 @@ Statistics coverage:
         </tr>
     </tbody>
 </table>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-48221605-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
 </body>
 </html>

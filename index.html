@@ -1,142 +1,101 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>#playername#</title>
+<title>PS2Stats</title>
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
 <script src="//ajax.aspnetcdn.com/ajax/jQuery/jquery-2.1.1.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.3/moment.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/purl/2.3.1/purl.min.js"></script>
-<script src="ps2-killboard.js"></script>
-<script src="ps2-player.js"></script>
-<script>
-moment.duration.fn.format = function(){
-	var str = ""
-    var days = Math.floor(this.asDays())
-	if(days > 0) str = str + days + "d "
-	if(this.hours() > 0) str = str + Math.floor(this.hours()) + "h "
-	if(this.minutes() > 0) str = str + Math.floor(this.minutes()) + "m "
-	if(this.seconds() > 0) str = str + Math.floor(this.seconds()) + "s "
-	return str
-}
-$(function() {
-	var character_id = $.url().param('character_id')
-	
-	if(!character_id)
-		return;
-	
-	killboard.init($('#killboard'), character_id);
-	player.init($('#player'));
-	
-	player.update(character_id);
-});
-</script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js"></script>
+<script src="//ajax.aspnetcdn.com/ajax/knockout/knockout-3.1.0.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/knockout.mapping/2.4.1/knockout.mapping.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<script src="ps2-search.js"></script>
 <style>
-body {
-	background-color: #000;
-	color: #fff;
-}
-table {
-	background-color: #031D1E;
-	border-collapse: collapse;
-}
-thead {
-	background-color: #073E44;
-}
-th, td {
-	border-left: 1px solid #094A4E;
-	border-right: 1px solid #094A4E;
-	border-bottom: 1px solid #094A4E;
-	padding: 4px 6px;
-}
-td.br, td.kd, td.spm, td.kpm, #stats td {
-	text-align: right;
-}
-tr.deaths {
-	background-color: #021112;
-}
-tr.vs td.event {
-	background-color: #a0a;
-}
-tr.nc td.event {
-	background-color: #00a;
-}
-tr.tr td.event {
-	background-color: #a00;
-}
-tr.deaths td.event {
-	opacity: 0.5;
-}
-tr.headshot td.method:last-child:after {
-	content: " (HS)";
-	color: #ccc;
-	font-size: 0.9em;
-}
-tr.suicide td.method:last-child:after {
-	content: " (Suicide)";
-	color: #c00;
-	font-size: 0.9em;
-}
-span.vehicle {
-	color: #00EAFF;
-}
-span.weapon + span.vehicle:before {
-	content: " (";
-}
-span.weapon + span.vehicle:after {
-	content: ")";
-}
-a {
-	color: #fff;
-	text-decoration: none;
-}
-#killboard {
-	float: left;
-	padding-right: 10px;
-}
-#player {
-}
-label {
-	display: block;
-	padding-bottom: 5px;
-}
-.circle {
-	display: inline-block;
-	margin-left: 5px;
-	border-radius: 50%;
-	width: 10px;
-	height: 10px;
-	/* width and height can be anything, as long as they're equal */
-}
 </style>
+<script>
+    var character_id = $.url().param('character_id')
+    if(character_id) {
+        window.location.replace("character.html?id="+character_id)
+    }
+</script>
 </head>
 <body>
-<div id="killboard">
-</div>
-<div id="player">
-	<label id="name">Name: <span></span><span id='online' class="circle"> </span></label>
-	<label id="outfit">Outfit: <span></span></label>
-	<label id="br">BR: <span></span></label>
-	<table id="stats">
-		<thead>
-			<tr>
-				<th>&nbsp;</th>
-				<th>Played</th>
-				<th>Score</th>
-				<th>Kills</th>
-				<th>Deaths</th>
-				<th>K/D</th>
-				<th>SPM</th>
-				<th>KPM</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr id="stats_overall"><th>Overall</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-			<tr id="stats_monthly"><th>Monthly</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-			<tr id="stats_weekly"><th>Weekly</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-			<tr id="stats_daily"><th>Daily</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-		</tbody>
-	</table>
-	<label id="lastupdate">Last Update: <span></span></label>
-</div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1>Search for characters or outfits...</h1>
+                
+                <div id="search" class="input-group">
+                    <div class="input-group-addon">
+                        <span class="glyphicon glyphicon-search"></span>
+                    </div>
+                    <input class="form-control" placeholder="eg.: Higby" data-bind="value: search"></input>
+                    <div class="input-group-btn">
+                        <button class="btn btn-default" data-bind="click: submit">Go!</button>
+                    </div>
+                </div>
+                
+                <p> </p>
+                
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div data-bind="visible: characters().length">
+                            <table class="table table-condensed table-striped">
+                                <legend>Characters...</legend>
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>BR</th>
+                                        <th>Server</th>
+                                    </tr>
+                                </thead>
+                                <tbody data-bind="foreach: characters">
+                                    <tr data-bind="if: $index() < $parent.limit()">
+                                        <td><a data-bind="text: name.first, attr: { href: 'character.html?id=' + character_id }"></a></td>
+                                        <td data-bind="text: battle_rank.value"></td>
+                                        <td data-bind="text: $parent.getWorldLabel(world.world_id)"></td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr data-bind="visible: characters().length > limit()">
+                                        <td colspan="3">and more...</td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div data-bind="visible: outfits().length">
+                            <table class="table table-condensed table-striped">
+                                <legend>Outfits...</legend>
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Tag</th>
+                                        <th>Server</th>
+                                    </tr>
+                                </thead>
+                                <tbody data-bind="foreach: outfits">
+                                    <tr data-bind="if: $index() <  $parent.limit()">
+                                        <td><a data-bind="text: name, attr: { href: 'outfit.html?id=' + outfit_id }"></a></td>
+                                        <td data-bind="text: alias"></td>
+                                        <td data-bind="text: $parent.getWorldLabel(leader.world.world_id)"></td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr data-bind="visible: outfits().length > limit()">
+                                        <td colspan="3">and more...</td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 <script type="text/javascript">
   var _gaq = _gaq || [];
   _gaq.push(['_setAccount', 'UA-48221605-1']);

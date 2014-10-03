@@ -14,6 +14,7 @@ var player = new function player() {
 				outfittext = "[" + outfit.alias + "] " + outfittext;
 			}
 			self.$outfit.text(outfittext);
+            self.$outfit.attr('href', 'outfit.html?id=' + outfit.outfit_id);
 		}
 		else {
 			self.$outfit.text('');
@@ -140,7 +141,7 @@ var player = new function player() {
 			self.$container = $container;
 			self.$name = self.$container.find('#name').find('span:first')
 			self.$br = self.$container.find('#br').children('span')
-			self.$outfit = self.$container.find('#outfit').children('span')
+			self.$outfit = self.$container.find('#outfit').children('a')
 			self.$lastupdate = self.$container.find('#lastupdate').children('span')
 		}
 		,update: function update(character_id) {

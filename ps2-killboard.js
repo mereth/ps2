@@ -95,7 +95,7 @@ var killboard = new function killboard() {
 		if(!character)
 			return "N/A"
 		
-		var info = "<a href='?character_id=" + character.character_id + "'>" + character.name.first + "</a>"
+		var info = "<a href='character?id=" + character.character_id + "'>" + character.name.first + "</a>"
 		
 		return info;
 	};

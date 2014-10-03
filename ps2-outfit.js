@@ -1,5 +1,5 @@
 (function() {
-    var outfit_id = $.url().param('outfit_id')
+    var outfit_id = $.url().param('id')
     if(!outfit_id)
         return;
 
