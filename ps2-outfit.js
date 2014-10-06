@@ -3,6 +3,9 @@
     if(!outfit_id)
         return;
 
+    var limit = 50;
+    var page = 0;
+    
     var outfitURL = "http://census.soe.com/get/ps2:v2/outfit/?callback=?";
 
     var membersURL = "http://census.soe.com/get/ps2:v2/outfit_member/?";
@@ -13,6 +16,7 @@
 
     var viewModel = {
         name: ko.observable('')
+      , memberCount: ko.observable('')
       , alias: ko.observable('')
       , members: ko.observableArray()
       , period: ko.observable('weekly')
@@ -27,10 +31,23 @@
         
         viewModel.name(outfit.name);
         viewModel.alias(outfit.alias);
+        viewModel.memberCount(outfit.member_count);
     };
 
     var processMembersData = function(data) {
         var members = [];
+        
+        // nothing to process?
+        if(!data.returned) return;
+        
+        
+        console.log(data.returned);
+        
+        // more members ? prefire async call
+        if(data.returned === limit) {
+            page++;
+            getOutfitMembers(outfit_id);
+        }
         
         _.forEach(data.outfit_member_list, function(member) {
             var character = member.character;
@@ -131,8 +148,13 @@
         return stats2;
     };
     
+    var getOutfitMembers = function(id) {
+        $.getJSON(membersURL, { outfit_id: outfit_id, "c:start": page*limit, "c:limit": limit }, processMembersData);
+    };
+    
     var prmOutfit = $.getJSON(outfitURL, { outfit_id: outfit_id }, processOutfitData);
-    var prmMembers = $.getJSON(membersURL, { outfit_id: outfit_id, "c:limit": 50 }, processMembersData);
+    //var prmMembers = $.getJSON(membersURL, { outfit_id: outfit_id, "c:limit": 50 }, processMembersData);
+    getOutfitMembers(outfit_id);
     
     $(function() {
         ko.applyBindings(viewModel);
