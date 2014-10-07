@@ -40,9 +40,6 @@
         // nothing to process?
         if(!data.returned) return;
         
-        
-        console.log(data.returned);
-        
         // more members ? prefire async call
         if(data.returned === limit) {
             page++;
@@ -51,6 +48,11 @@
         
         _.forEach(data.outfit_member_list, function(member) {
             var character = member.character;
+            
+            if(!character) {
+                if(console.log) console.log("character '" + member.character_id + "' not found.");
+                return;
+            }
             
             var characters_stat_history = _.indexBy(member.characters_stat_history, "stat_name");
             
@@ -61,7 +63,7 @@
             character.rank = member.rank;
             character.rank_ordinal = member.rank_ordinal;
             
-            character.last_stats_update = moment.unix(characters_stat_history.score.last_save*1 + 25200).format("MMM D, HH:mm:ss");
+            character.last_stats_update = characters_stat_history.score ? moment.unix(characters_stat_history.score.last_save*1 + 25200).format("MMM D, HH:mm:ss") : "";
             
             character.filteredStatistics = ko.computed(function() {
                 var period = viewModel.period();
@@ -82,14 +84,21 @@
 
     var computeStatistics = function(stats) {
         var stats2 = {
-            time: { all_time: stats.time.all_time*1, monthly: 0, weekly: 0, daily: 0}
-          , score: { all_time: stats.score.all_time*1, monthly: 0, weekly: 0, daily: 0}
-          , kills: { all_time: stats.kills.all_time*1, monthly: 0, weekly: 0, daily: 0}
-          , deaths: { all_time: stats.deaths.all_time*1, monthly: 0, weekly: 0, daily: 0}
+            time: { all_time: 0, monthly: 0, weekly: 0, daily: 0}
+          , score: { all_time: 0, monthly: 0, weekly: 0, daily: 0}
+          , kills: { all_time: 0, monthly: 0, weekly: 0, daily: 0}
+          , deaths: { all_time: 0, monthly: 0, weekly: 0, daily: 0}
           , kdr: { all_time: 0, monthly: 0, weekly: 0, daily: 0}
           , spm: { all_time: 0, monthly: 0, weekly: 0, daily: 0}
           , kpm: { all_time: 0, monthly: 0, weekly: 0, daily: 0}
         }
+        
+        if(!stats.time) return stats2;
+        
+        stats2.time.all_time = stats.time.all_time*1;
+        stats2.score.all_time = stats.score.all_time*1;
+        stats2.kills.all_time = stats.kills.all_time*1;
+        stats2.deaths.all_time = stats.deaths.all_time*1;
         
         var sum_time = 0;
         var sum_score = 0;
