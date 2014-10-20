@@ -5,137 +5,210 @@
 <script src="//ajax.aspnetcdn.com/ajax/jQuery/jquery-2.1.1.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.3/moment.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/purl/2.3.1/purl.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js"></script>
+<script src="//ajax.aspnetcdn.com/ajax/knockout/knockout-3.1.0.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/knockout.mapping/2.4.1/knockout.mapping.min.js"></script>
+<script src="ps2-stats.js"></script>
 <script src="ps2-killboard.js"></script>
 <script src="ps2-player.js"></script>
 <script>
-moment.duration.fn.format = function(){
-	var str = ""
+moment.duration.fn.format = function() {
+    var str = "";
     var days = Math.floor(this.asDays())
-	if(days > 0) str = str + days + "d "
-	if(this.hours() > 0) str = str + Math.floor(this.hours()) + "h "
-	if(this.minutes() > 0) str = str + Math.floor(this.minutes()) + "m "
-	if(this.seconds() > 0) str = str + Math.floor(this.seconds()) + "s "
-	return str
-}
-$(function() {
-	var character_id = $.url().param('id')
-	
-	if(!character_id)
-		return;
-	
-	killboard.init($('#killboard'), character_id);
-	player.init($('#player'));
-	
-	player.update(character_id);
-});
+    if(days > 0) str = str + days + "d "
+    if(this.hours() > 0) str = str + Math.floor(this.hours()) + "h "
+    if(this.minutes() > 0) str = str + Math.floor(this.minutes()) + "m "
+    if(this.seconds() > 0) str = str + Math.floor(this.seconds()) + "s "
+    return str
+};
+
+(function() {
+    var character_id = $.url().param('id')
+
+    if(!character_id)
+        return;
+
+    ps2.killboard.update(character_id);
+    ps2.player.update(character_id);
+})();
 </script>
 <style>
 body {
-	background-color: #000;
-	color: #fff;
+    background-color: #000;
+    color: #fff;
 }
 table {
-	background-color: #031D1E;
-	border-collapse: collapse;
+    background-color: #031D1E;
+    border-collapse: collapse;
 }
 thead {
-	background-color: #073E44;
+    background-color: #073E44;
 }
 th, td {
-	border-left: 1px solid #094A4E;
-	border-right: 1px solid #094A4E;
-	border-bottom: 1px solid #094A4E;
-	padding: 4px 6px;
+    border-left: 1px solid #094A4E;
+    border-right: 1px solid #094A4E;
+    border-bottom: 1px solid #094A4E;
+    padding: 4px 6px;
 }
 td.br, td.kd, td.spm, td.kpm, #stats td {
-	text-align: right;
+    text-align: right;
 }
 tr.deaths {
-	background-color: #021112;
+    background-color: #021112;
 }
-tr.vs td.event {
-	background-color: #a0a;
+tr.vs td.faction {
+    background-color: #a0a;
 }
-tr.nc td.event {
-	background-color: #00a;
+tr.nc td.faction {
+    background-color: #00a;
 }
-tr.tr td.event {
-	background-color: #a00;
+tr.tr td.faction {
+    background-color: #a00;
 }
-tr.deaths td.event {
-	opacity: 0.5;
+tr.deaths td.faction {
+    opacity: 0.5;
 }
 tr.headshot td.method:last-child:after {
-	content: " (HS)";
-	color: #ccc;
-	font-size: 0.9em;
+    content: " (HS)";
+    color: #ccc;
+    font-size: 0.9em;
 }
 tr.suicide td.method:last-child:after {
-	content: " (Suicide)";
-	color: #c00;
-	font-size: 0.9em;
+    content: " (Suicide)";
+    color: #c00;
+    font-size: 0.9em;
 }
 span.vehicle {
-	color: #00EAFF;
+    color: #00EAFF;
 }
 span.weapon + span.vehicle:before {
-	content: " (";
+    content: " (";
 }
 span.weapon + span.vehicle:after {
-	content: ")";
+    content: ")";
 }
 a {
-	color: #fff;
-	text-decoration: none;
+    color: #fff;
+    text-decoration: none;
 }
 #killboard {
-	float: left;
-	padding-right: 10px;
+    float: left;
+    padding-right: 10px;
 }
 #player {
 }
 label {
-	display: block;
-	padding-bottom: 5px;
+    display: block;
+    padding-bottom: 5px;
 }
 .circle {
-	display: inline-block;
-	margin-left: 5px;
-	border-radius: 50%;
-	width: 10px;
-	height: 10px;
-	/* width and height can be anything, as long as they're equal */
+    display: inline-block;
+    margin-left: 5px;
+    border-radius: 50%;
+    width: 10px;
+    height: 10px;
+    /* width and height can be anything, as long as they're equal */
 }
 </style>
 </head>
 <body>
 <div id="killboard">
+    <table>
+        <thead>
+            <tr>
+                <th rowspan='2'>Time</th>
+                <th rowspan='2'></th>
+                <th colspan='6'>Player</th>
+                <th rowspan='2'>Method</th>
+            </tr>
+            <tr>
+                <th>Name</th>
+                <th>BR</th>
+                <th>Outfit</th>
+                <th>K/D</th>
+                <th>SPM</th>
+                <th>KPM</th>
+            </tr>
+        </thead>
+        <tbody data-bind="foreach: events">
+            <tr data-bind="css: [faction, type, (suicide ? 'suicide' : ''),  (headshot ? 'headshot' : '')].join(' ')">
+                <td class="time" data-bind="text: time"></td>
+                <td class="faction">&nbsp;</td>
+                <td class="name" data-bind="html: name"></td>
+                <td class="br" data-bind="text: br"></td>
+                <td class="outfit" data-bind="html: outfit"></td>
+                <td class="kd" data-bind="text: kd"></td>
+                <td class="spm" data-bind="text: spm"></td>
+                <td class="kpm" data-bind="text: kpm"></td>
+                <td class="method" data-bind="html: method"></td>
+            </tr>
+        </tbody>
+    </table>
+    <button data-bind="click: getMore">More</button>
 </div>
 <div id="player">
-	<label id="name">Name: <span></span><span id='online' class="circle"> </span></label>
-	<label id="outfit">Outfit: <a></a></label>
-	<label id="br">BR: <span></span></label>
-	<table id="stats">
-		<thead>
-			<tr>
-				<th>&nbsp;</th>
-				<th>Played</th>
-				<th>Score</th>
-				<th>Kills</th>
-				<th>Deaths</th>
-				<th>K/D</th>
-				<th>SPM</th>
-				<th>KPM</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr id="stats_overall"><th>Overall</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-			<tr id="stats_monthly"><th>Monthly</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-			<tr id="stats_weekly"><th>Weekly</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-			<tr id="stats_daily"><th>Daily</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-		</tbody>
-	</table>
-	<label id="lastupdate">Last Update: <span></span></label>
+    <label id="name">Name: <span data-bind="text: name"></span>
+        <span class="circle" data-bind="style: { backgroundColor: (online() == '0' ? '#f00' : '#0f0') }"></span>
+    </label>
+    <label id="outfit">Outfit: <a data-bind="text: outfit, attr: { href: 'outfit.html?id=' + outfitId() }"></a></label>
+    <label id="br">BR: <span data-bind="text: br"></span></label>
+    <table id="stats" data-bind="if: statistics">
+        <thead>
+            <tr>
+                <th>&nbsp;</th>
+                <th>Played</th>
+                <th>Score</th>
+                <th>Kills</th>
+                <th>Deaths</th>
+                <th>K/D</th>
+                <th>SPM</th>
+                <th>KPM</th>
+            </tr>
+        </thead>
+        <tbody data-bind="with: statistics">
+            <tr id="stats_overall">
+                <th>Overall</th>
+                <td data-bind="text: moment.duration(time.all_time, 's').format()"></td>
+                <td data-bind="text: score.all_time"></td>
+                <td data-bind="text: kills.all_time"></td>
+                <td data-bind="text: deaths.all_time"></td>
+                <td data-bind="text: kdr.all_time"></td>
+                <td data-bind="text: spm.all_time"></td>
+                <td data-bind="text: kpm.all_time"></td>
+            </tr>
+            <tr id="stats_monthly">
+                <th>Monthly</th>
+                <td data-bind="text: moment.duration(time.monthly, 's').format()"></td>
+                <td data-bind="text: score.monthly"></td>
+                <td data-bind="text: kills.monthly"></td>
+                <td data-bind="text: deaths.monthly"></td>
+                <td data-bind="text: kdr.monthly"></td>
+                <td data-bind="text: spm.monthly"></td>
+                <td data-bind="text: kpm.monthly"></td>
+            </tr>
+            <tr id="stats_weekly">
+                <th>Weekly</th>
+                <td data-bind="text: moment.duration(time.weekly, 's').format()"></td>
+                <td data-bind="text: score.weekly"></td>
+                <td data-bind="text: kills.weekly"></td>
+                <td data-bind="text: deaths.weekly"></td>
+                <td data-bind="text: kdr.weekly"></td>
+                <td data-bind="text: spm.weekly"></td>
+                <td data-bind="text: kpm.weekly"></td>
+            </tr>
+            <tr id="stats_daily">
+                <th>Daily</th>
+                <td data-bind="text: moment.duration(time.daily, 's').format()"></td>
+                <td data-bind="text: score.daily"></td>
+                <td data-bind="text: kills.daily"></td>
+                <td data-bind="text: deaths.daily"></td>
+                <td data-bind="text: kdr.daily"></td>
+                <td data-bind="text: spm.daily"></td>
+                <td data-bind="text: kpm.daily"></td>
+            </tr>
+        </tbody>
+    </table>
+    <label id="lastupdate">Last Update: <span data-bind="text: lastUpdate"></span></label>
 </div>
 <script type="text/javascript">
   var _gaq = _gaq || [];
