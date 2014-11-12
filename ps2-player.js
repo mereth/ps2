@@ -22,6 +22,10 @@
       , lastUpdate: ko.observable('')
     };
     
+    viewModel.name.subscribe(function(value) {
+        document.title = value;
+    });
+    
     var getCharacter = function() {
         $.getJSON(url, { character_id: viewModel.characterId() }, build);
     };
