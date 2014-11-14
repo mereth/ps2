@@ -6,13 +6,18 @@
     url += "&c:tree=start:characters_stat_history^field:stat_name";
     url += "&c:join=outfit_member^on:character_id^inject_at:outfit_member(outfit^inject_at:outfit)";
     url += "&c:join=characters_online_status^on:character_id^inject_at:characters_online_status^show:online_status"
+    url += "&c:join=faction^inject_at:faction^show:image_path'code_tag"
     url += "&callback=?";
     
     var viewModel = {
         characterId: ko.observable()
       , name: ko.observable('')
-      , br: ko.observable('')
+      , rank: ko.observable('')
+      , rankImage: ko.observable('')
       , online: ko.observable('')
+      
+      , factionTag: ko.observable('')
+      , factionImage: ko.observable('')
       
       , outfitId: ko.observable()
       , outfitName: ko.observable('')
@@ -42,20 +47,25 @@
             viewModel.outfitAlias(outfit.alias);
         }
         
-        viewModel.br(character.battle_rank.value);
-        
         if(character.characters_online_status) {
             viewModel.online(character.characters_online_status.online_status);
         }
+        
+        viewModel.factionTag(character.faction.code_tag.toLowerCase());
+        viewModel.factionImage('https://census.soe.com' + character.faction.image_path);
         
         viewModel.statistics(null);
         viewModel.lastUpdate('');
         
         var characters_stat_history = character.characters_stat_history;
         if(characters_stat_history) {
-            viewModel.statistics(ps2.stats.compute(characters_stat_history));
+            viewModel.statistics(ps2.util.computeStatistics(characters_stat_history));
             viewModel.lastUpdate(moment.unix(characters_stat_history.score.last_save*1 + 25200).format("MMM D, HH:mm:ss"));
         }
+        
+        var rank = character.battle_rank.value;
+        viewModel.rank(ps2.util.getComputedRank(characters_stat_history.score.all_time));
+        viewModel.rankImage('https://census.soe.com' + ps2.util.getRankImage(rank, viewModel.factionTag()));
     }
     
     viewModel.outfit = ko.computed(function() {

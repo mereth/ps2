@@ -56,7 +56,7 @@
             
             var characters_stat_history = _.indexBy(member.characters_stat_history, "stat_name");
             
-            character.statistics = ps2.stats.compute(characters_stat_history);
+            character.statistics = ps2.util.computeStatistics(characters_stat_history);
             character.characters_online_status = member.characters_online_status;
             
             character.member_since = member.member_since;

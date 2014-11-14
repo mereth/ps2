@@ -8,7 +8,7 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js"></script>
 <script src="//ajax.aspnetcdn.com/ajax/knockout/knockout-3.1.0.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/knockout.mapping/2.4.1/knockout.mapping.min.js"></script>
-<script src="ps2-stats.js"></script>
+<script src="ps2-util.js"></script>
 <script src="ps2-outfit.js"></script>
 <style>
 body {
@@ -46,17 +46,6 @@ a {
 	/* width and height can be anything, as long as they're equal */
 }
 </style>
-<script>
-moment.duration.fn.format = function() {
-	var str = ""
-	var days = Math.floor(this.asDays())
-	if(days > 0) str = str + days + "d "
-	if(this.hours() > 0) str = str + Math.floor(this.hours()) + "h "
-	if(this.minutes() > 0) str = str + Math.floor(this.minutes()) + "m "
-	if(this.seconds() > 0) str = str + Math.floor(this.seconds()) + "s "
-	return str
-};
-</script>
 </head>
 <body>
 <p>

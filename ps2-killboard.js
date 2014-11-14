@@ -86,7 +86,7 @@
 		
 		model.time = buildTimeInfo(event.timestamp);
 		model.name = buildPlayerInfo(character);
-		model.br = buildBR(character);
+		model.rank = buildBR(character);
 		model.outfit = buildOutfitInfo(character);
 		model.kd = buildKD(character);
 		model.spm = buildSPM(character);
@@ -119,8 +119,10 @@
 				info += "[" + character.outfit.details.alias + "] ";
 			}
 			info += character.outfit.details.name;
+      
+      info = "<a href='outfit.html?id=" + character.outfit.outfit_id + "'>" + info + "</a>"
 		}
-		
+    
 		return info;
 	}
 
@@ -128,7 +130,7 @@
 		if(!character)
 			return ""
 		
-		return character.battle_rank.value;
+		return ps2.util.getComputedRank(character.stat_score.all_time);
 	}
 
 	var buildKD = function buildKD(character) {
