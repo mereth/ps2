@@ -60,7 +60,7 @@
         var characters_stat_history = character.characters_stat_history;
         if(characters_stat_history) {
             viewModel.statistics(ps2.util.computeStatistics(characters_stat_history));
-            viewModel.lastUpdate(moment.unix(characters_stat_history.score.last_save*1 + 25200).format("MMM D, HH:mm:ss"));
+            viewModel.lastUpdate(moment.unix(characters_stat_history.score.last_save*1 + 28800).format("MMM D, HH:mm:ss"));
         }
         
         var rank = character.battle_rank.value;

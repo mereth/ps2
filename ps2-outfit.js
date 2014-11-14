@@ -63,7 +63,7 @@
             character.rank = member.rank;
             character.rank_ordinal = member.rank_ordinal;
             
-            character.last_stats_update = characters_stat_history.score ? moment.unix(characters_stat_history.score.last_save*1 + 25200).format("MMM D, HH:mm:ss") : "";
+            character.last_stats_update = characters_stat_history.score ? moment.unix(characters_stat_history.score.last_save*1 + 28800).format("MMM D, HH:mm:ss") : "";
             
             character.filteredStatistics = ko.computed(function() {
                 var period = viewModel.period();
