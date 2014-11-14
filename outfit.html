@@ -83,8 +83,8 @@ Statistics coverage:
                 <span class="circle" data-bind="style: { backgroundColor: (characters_online_status && characters_online_status.online_status == '0' ? '#f00' : '#0f0') }"></span>
                 <a data-bind="text: name.first, attr: { href: 'character.html?id=' + character_id }"></a>
             </td>
-            <td data-bind="text: battle_rank.value"></td>
             <td data-bind="text: rank"></td>
+            <td data-bind="text: outfitRank"></td>
             
             <td class="stat" data-bind="text: moment.duration(filteredStatistics().time, 's').format()"></td>
             <td class="stat" data-bind="text: filteredStatistics().score"></td>
