@@ -95,7 +95,7 @@ th.outfitrank, td.outfitrank { text-align: left; }
     <tbody data-bind="foreach: members">
         <tr>
             <td class="name">
-                <span class="circle" data-bind="style: { backgroundColor: (characters_online_status && characters_online_status.online_status == '0' ? '#f00' : '#0f0') }"></span>
+                <span class="circle" data-bind="style: { backgroundColor: (characters_online_status == '0' ? '#f00' : '#0f0') }"></span>
                 <a data-bind="text: name.first, attr: { href: 'character.html?id=' + character_id }"></a>
             </td>
             <td data-bind="text: outfitRank" class="outfitrank"></td>

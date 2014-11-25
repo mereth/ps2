@@ -68,7 +68,12 @@
             var characters_stat_history = _.indexBy(member.characters_stat_history, "stat_name");
             
             character.statistics = ps2.util.computeStatistics(characters_stat_history);
-            character.characters_online_status = member.characters_online_status;
+            if(member.characters_online_status) {
+              character.characters_online_status = member.characters_online_status.online_status;
+            }
+            else {
+              character.characters_online_status = '0';
+            }
             
             character.member_since = member.member_since;
             character.outfitRank = member.rank;
@@ -91,6 +96,8 @@
         });
         
         viewModel.members.sort(function(left, right) {
+            var diff = left.characters_online_status == right.characters_online_status ? 0 : (left.characters_online_status < right.characters_online_status ? 1 : -1)
+            if(diff !== 0) return diff;
             return left.name.first_lower == right.name.first_lower ? 0 : (left.name.first_lower < right.name.first_lower ? -1 : 1)
         });
     };
