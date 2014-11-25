@@ -6,8 +6,10 @@
     var limit = 50;
     var page = 0;
     
-    var outfitURL = "http://census.soe.com/get/ps2:v2/outfit/?callback=?";
-
+    var outfitURL = "http://census.soe.com/get/ps2:v2/outfit/?";
+    outfitURL += "c:join=character^on:leader_character_id^to:character_id^inject_at:leader(faction^inject_at:faction^show:image_path'code_tag)";
+    outfitURL += "&callback=?";
+    
     var membersURL = "http://census.soe.com/get/ps2:v2/outfit_member/?";
     membersURL += "c:join=character^on:character_id^inject_at:character";
     membersURL += "&c:join=characters_stat_history^on:character_id^inject_at:characters_stat_history^list:1";
@@ -16,8 +18,12 @@
 
     var viewModel = {
         name: ko.observable('')
-      , memberCount: ko.observable('')
       , alias: ko.observable('')
+      , membersCount: ko.observable('')
+      
+      , factionTag: ko.observable('')
+      , factionImage: ko.observable('')
+      
       , members: ko.observableArray()
       , period: ko.observable('weekly')
     };
@@ -31,7 +37,12 @@
         
         viewModel.name(outfit.name);
         viewModel.alias(outfit.alias);
-        viewModel.memberCount(outfit.member_count);
+        viewModel.membersCount(outfit.member_count);
+        
+        if(outfit.leader) {
+          viewModel.factionTag(outfit.leader.faction.code_tag.toLowerCase());
+          viewModel.factionImage('https://census.soe.com' + outfit.leader.faction.image_path);
+        }
     };
 
     var processMembersData = function(data) {

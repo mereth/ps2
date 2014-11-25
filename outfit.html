@@ -2,40 +2,36 @@
 <html>
 <head>
 <title>#outfitname#</title>
+<link href="//ajax.aspnetcdn.com/ajax/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
 <script src="//ajax.aspnetcdn.com/ajax/jQuery/jquery-2.1.1.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.3/moment.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/purl/2.3.1/purl.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js"></script>
 <script src="//ajax.aspnetcdn.com/ajax/knockout/knockout-3.1.0.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/knockout.mapping/2.4.1/knockout.mapping.min.js"></script>
+<script src="//ajax.aspnetcdn.com/ajax/bootstrap/3.3.0/bootstrap.min.js"></script>
 <script src="ps2-util.js"></script>
 <script src="ps2-outfit.js"></script>
 <style>
-body {
-	background-color: #000;
-	color: #fff;
-}
-table {
-	background-color: #031D1E;
-	border-collapse: collapse;
-}
-thead {
-	background-color: #073E44;
-}
-th, td {
-	border-left: 1px solid #094A4E;
-	border-right: 1px solid #094A4E;
-	border-bottom: 1px solid #094A4E;
-	padding: 4px 6px;
-}
-td.stat {
-	text-align: right;
+.navbar-brand {
+  background-position: 10px center;
+  background-size: 25px 25px;
+  background-repeat: no-repeat;
 }
 
-a {
-	color: #fff;
-	text-decoration: none;
-}
+.nc a { color: #55e; }
+.nc .navbar-brand { color: #55c !important; }
+
+.tr a { color: #e00; }
+.tr .navbar-brand { color: #c22 !important; }
+
+.vs a { color: #e0e; }
+.vs .navbar-brand { color: #c0c !important; }
+
+th, td { text-align: right; }
+th.name, td.name { text-align: left; }
+th.outfitrank, td.outfitrank { text-align: left; }
+
 
 .circle {
 	display: inline-block;
@@ -47,25 +43,44 @@ a {
 }
 </style>
 </head>
-<body>
-<p>
-Name: <span data-bind="text: '[' + alias() + '] ', visible: alias()"></span><span data-bind="text: name"></span><br/>
-Members: <span data-bind="text: memberCount"/>
-</p>
+<body data-bind="css: factionTag">
+<header class="navbar navbar-static-top navbar-inverse" role="banner">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <div class="navbar-brand" data-bind="style: { backgroundImage: 'url(' + factionImage() + ')' }">
+        <span style="margin-left:25px;"><span data-bind="text: '[' + alias() + '] ', visible: alias()"></span><span data-bind="text: name"></span></span>
+      </div>
+    </div>
+    <p class="navbar-text members-count">
+      <span data-bind="text: membersCount"></span> members
+    </p>
+    <!--
+    <form class="navbar-form navbar-right" role="search">
+      <div class="form-group">
+        <input type="text" class="form-control" placeholder="Search">
+      </div>
+    </form>
+    -->
+  </div>
+</header>
 
-Statistics coverage: 
-<input type="radio" value="daily" data-bind="checked: period" /> Daily</div>
-<input type="radio" value="weekly" data-bind="checked: period" /> Weekly</div>
-<input type="radio" value="monthly" data-bind="checked: period" /> Monthly</div>
-<input type="radio" value="all_time" data-bind="checked: period" /> Overall</div>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-xs-12">
 
+    <div class="form-group">
+      <label>Statistics coverage</label>
+      <label class="checkbox-inline"><input type="radio" value="daily" data-bind="checked: period" /> Daily</label>
+      <label class="checkbox-inline"><input type="radio" value="weekly" data-bind="checked: period" /> Weekly</label>
+      <label class="checkbox-inline"><input type="radio" value="monthly" data-bind="checked: period" /> Monthly</label>
+      <label class="checkbox-inline"><input type="radio" value="all_time" data-bind="checked: period" /> Overall</label>
+    </div>
 
-
-<table>
+<table class="table table-condensed">
     <thead>
         <tr>
-            <th>Name</th>
-            <th>BR</th>
+            <th class="name">Name</th>
+            <th class="outfitrank">OutfitRank</th>
             <th>Rank</th>
             <th>Played</th>
             <th>Score</th>
@@ -79,13 +94,12 @@ Statistics coverage:
     </thead>
     <tbody data-bind="foreach: members">
         <tr>
-            <td>
+            <td class="name">
                 <span class="circle" data-bind="style: { backgroundColor: (characters_online_status && characters_online_status.online_status == '0' ? '#f00' : '#0f0') }"></span>
                 <a data-bind="text: name.first, attr: { href: 'character.html?id=' + character_id }"></a>
             </td>
+            <td data-bind="text: outfitRank" class="outfitrank"></td>
             <td data-bind="text: rank"></td>
-            <td data-bind="text: outfitRank"></td>
-            
             <td class="stat" data-bind="text: moment.duration(filteredStatistics().time, 's').format()"></td>
             <td class="stat" data-bind="text: filteredStatistics().score"></td>
             <td class="stat" data-bind="text: filteredStatistics().kills"></td>
@@ -98,6 +112,11 @@ Statistics coverage:
         </tr>
     </tbody>
 </table>
+
+    </div>
+  </div>
+</div>
+
 <script type="text/javascript">
   var _gaq = _gaq || [];
   _gaq.push(['_setAccount', 'UA-48221605-1']);
