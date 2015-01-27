@@ -193,7 +193,7 @@ span.weapon + span.vehicle:after {
             </tr>
         </thead>
         <tbody data-bind="foreach: events">
-            <tr data-bind="css: [faction, (type == 'deaths' ? 'active': ''), (suicide ? 'suicide' : ''),  (headshot ? 'headshot' : '')].join(' ')">
+            <tr data-bind="css: getRowCss()">
                 <td class="time" data-bind="text: time"></td>
                 <td class="name" data-bind="html: name"></td>
                 <td class="outfit" data-bind="html: outfit"></td>

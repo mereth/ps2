@@ -93,6 +93,14 @@
 		model.kpm = buildKPM(character);
 		model.method = buildMethodInfo(event.attacker_weapon, event.attacker_vehicle);
 		
+		model.getRowCss = function() {
+			var css = model.faction;
+			css += (model.type == 'deaths' ? ' active': '');
+			css += (model.suicide ? ' suicide' : '');
+			css += (model.headshot ? ' headshot' : '');
+			return css;
+		};
+		
 		viewModel.events.push(model);
 	};
 
