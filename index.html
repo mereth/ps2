@@ -12,6 +12,9 @@
 <script src="//ajax.aspnetcdn.com/ajax/bootstrap/3.3.1/bootstrap.min.js"></script>
 <script src="ps2-search.js"></script>
 <style>
+.nc a { color: #55e; }
+.tr a { color: #e00; }
+.vs a { color: #e0e; }
 </style>
 <script>
     var character_id = $.url().param('character_id')
@@ -51,7 +54,7 @@
                                     </tr>
                                 </thead>
                                 <tbody data-bind="foreach: characters">
-                                    <tr data-bind="if: $index() < $parent.limit()">
+                                    <tr data-bind="if: $index() < $parent.limit(), css: { vs: (faction_id == '1'), nc: (faction_id == '2'), tr: (faction_id == '3') }">
                                         <td><a data-bind="text: name.first, attr: { href: 'character.html?id=' + character_id }"></a></td>
                                         <td data-bind="text: battle_rank.value"></td>
                                         <td data-bind="text: $parent.getWorldLabel(world.world_id)"></td>
@@ -77,7 +80,7 @@
                                     </tr>
                                 </thead>
                                 <tbody data-bind="foreach: outfits">
-                                    <tr data-bind="if: $index() <  $parent.limit()">
+                                    <tr data-bind="if: $index() <  $parent.limit(), css: { vs: (leader.faction_id == '1'), nc: (leader.faction_id == '2'), tr: (leader.faction_id == '3') }">
                                         <td><a data-bind="text: name, attr: { href: 'outfit.html?id=' + outfit_id }"></a></td>
                                         <td data-bind="text: alias"></td>
                                         <td data-bind="text: $parent.getWorldLabel(leader.world.world_id)"></td>
