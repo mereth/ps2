@@ -1,11 +1,12 @@
 (function() {
+    var term = $.url().param('term');
     
     var worldURL = "http://census.soe.com/get/ps2:v2/world/?c:limit=50&callback=?";
     var outfitURL = "http://census.soe.com/get/ps2:v2/outfit/?c:join=character^on:leader_character_id^to:character_id^inject_at:leader^show:faction_id'world(characters_world^inject_at:world)&callback=?";
     var characterURL = "http://census.soe.com/get/ps2:v2/character/?c:join=characters_world^inject_at:world&c:show=character_id,name,battle_rank,world,faction_id&callback=?";
 
     var viewModel = {
-        search: ko.observable('')
+        search: ko.observable(term)
       , searching: ko.observable(false)
       , limit: ko.observable(20)
     
@@ -113,5 +114,9 @@
                 $("#search button").trigger('click');
             }
         });
+        
+        if(viewModel.search()) {
+            $("#search button").trigger('click');
+        }
     });
 })();
