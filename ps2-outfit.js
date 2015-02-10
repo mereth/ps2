@@ -3,7 +3,7 @@
     if(!outfit_id)
         return;
 
-    var limit = 50;
+    var limit = 100;
     var page = 0;
     
     var outfitURL = "http://census.soe.com/get/ps2:v2/outfit/?";
