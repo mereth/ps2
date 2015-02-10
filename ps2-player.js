@@ -1,5 +1,6 @@
 (function() {
     var self = this;
+    var character_id = $.url().param('id')
     
     var url = "http://census.soe.com/get/ps2:v2/character/?";
     url += "c:join=characters_stat_history^list:1^inject_at:characters_stat_history";
@@ -85,6 +86,7 @@
         }
     };
     
+    ps2.player.update(character_id);
     $(function() {
         ko.applyBindings(viewModel, document.getElementById('player'));
     });

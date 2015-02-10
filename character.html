@@ -21,7 +21,6 @@
         return;
 
     ps2.killboard.update(character_id);
-    ps2.player.update(character_id);
 })();
 </script>
 <style>
@@ -96,6 +95,9 @@ span.weapon + span.vehicle:after {
     </p>
     <p class="navbar-text" >
       <a data-bind="text: outfit, attr: { href: 'outfit.html?id=' + outfitId() }"></a>
+    </p>
+    <p class="navbar-text">
+        <a data-bind="attr: { href: 'friends.html?id=' + characterId() }" class="navbar-link">Friends</a>
     </p>
     <form class="navbar-form navbar-right" role="search" action="index.html">
       <div class="form-group">
