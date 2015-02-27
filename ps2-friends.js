@@ -5,18 +5,14 @@
     
     var friendsURL = "http://census.soe.com/get/ps2:v2/characters_friend?"
     friendsURL += "c:join=character^on:friend_list.character_id^to:character_id^inject_at:character"
-    friendsURL += "(characters_stat_history^on:character_id^inject_at:characters_stat_history^list:1)"
+    friendsURL += "(";
+    friendsURL += "characters_stat_history^on:character_id^inject_at:characters_stat_history^list:1"
+    friendsURL += ",outfit_member^show:outfit_id^inject_at:outfit(outfit^show:name'alias^inject_at:details)"
+    friendsURL += ")";
     friendsURL += "&callback=?";
 
     var viewModel = {
-        name: ko.observable('')
-      , alias: ko.observable('')
-      , membersCount: ko.observable('')
-      
-      , factionTag: ko.observable('')
-      , factionImage: ko.observable('')
-      
-      , friends: ko.observableArray()
+        friends: ko.observableArray()
       , period: ko.observable('weekly')
     };
 
@@ -42,6 +38,14 @@
             }
             else {
               character.characters_online_status = '0';
+            }
+            
+            var outfit = character.outfit;
+            if(outfit) {
+                outfit.display_name = outfit.details.name;
+                if(outfit.details.alias) {
+                    outfit.display_name = "[" + outfit.details.alias + "] " + outfit.display_name;
+                }
             }
             
             character.rank = ps2.util.getComputedRank(characters_stat_history.score.all_time);

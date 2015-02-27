@@ -31,7 +31,7 @@
 
 th, td { text-align: right; }
 th.name, td.name { text-align: left; }
-th.outfitrank, td.outfitrank { text-align: left; }
+th.outfit, td.outfit { text-align: left; }
 
 
 .circle {
@@ -86,6 +86,7 @@ th.outfitrank, td.outfitrank { text-align: left; }
         <thead>
             <tr>
                 <th class="name">Name</th>
+                <th class="outfit">Outfit</th>
                 <th>Rank</th>
                 <th>Played</th>
                 <th>Score</th>
@@ -102,6 +103,11 @@ th.outfitrank, td.outfitrank { text-align: left; }
                 <td class="name">
                     <span class="circle" data-bind="style: { backgroundColor: (characters_online_status == '0' ? '#f00' : '#0f0') }"></span>
                     <a data-bind="text: name.first, attr: { href: 'character.html?id=' + character_id }"></a>
+                </td>
+                <td class="outfit">
+                    <span data-bind="if: $data.outfit">
+                        <a data-bind="text: outfit.display_name, attr: { href: 'outfit.html?id=' + outfit.outfit_id }"></a>
+                    </span>
                 </td>
                 <td data-bind="text: rank"></td>
                 <td class="stat" data-bind="text: moment.duration(filteredStatistics().time, 's').format()"></td>
