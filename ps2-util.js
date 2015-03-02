@@ -17,6 +17,14 @@
         return 99 + getComputedRank(experience - ranks[100].xp_max);
     };
     
+    var convertTimezone = function(unixtime) {
+        return (unixtime * 1) + 28800; // 28800 or 25200
+    };
+    
+    var getLastUpdateString = function(unixtime) {
+        return moment.unix(convertTimezone(unixtime)).format("MMM D, HH:mm:ss");
+    };
+    
     var computeStatistics = function(stats) {
         var stats2 = {
             time: { all_time: 0, monthly: 0, weekly: 0, daily: 0}
@@ -97,6 +105,8 @@
         computeStatistics: computeStatistics
       , getRankImage: getRankImage
       , getComputedRank: getComputedRank
+      , convertTimezone: convertTimezone
+      , getLastUpdateString: getLastUpdateString
     };
 
 })();

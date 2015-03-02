@@ -53,7 +53,7 @@
             
             character.rank = ps2.util.getComputedRank(characters_stat_history.score.all_time);
             
-            character.last_stats_update = characters_stat_history.score ? moment.unix(characters_stat_history.score.last_save*1 + 25200).format("MMM D, HH:mm:ss") : "";
+            character.last_stats_update = characters_stat_history.score ? ps2.util.getLastUpdateString(characters_stat_history.score.last_save) : "";
             
             character.filteredStatistics = ko.computed(function() {
                 var period = viewModel.period();
