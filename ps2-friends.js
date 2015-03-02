@@ -48,6 +48,9 @@
                 }
             }
             
+            if(!characters_stat_history.score)
+                return;
+            
             character.rank = ps2.util.getComputedRank(characters_stat_history.score.all_time);
             
             character.last_stats_update = characters_stat_history.score ? moment.unix(characters_stat_history.score.last_save*1 + 25200).format("MMM D, HH:mm:ss") : "";
