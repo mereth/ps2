@@ -2,7 +2,7 @@
     var self = this;
     var character_id = $.url().param('id')
     
-    var url = "http://census.soe.com/get/ps2:v2/character/?";
+    var url = "http://census.daybreakgames.com/get/ps2:v2/character/?";
     url += "c:join=characters_stat_history^list:1^inject_at:characters_stat_history";
     url += "&c:tree=start:characters_stat_history^field:stat_name";
     url += "&c:join=outfit_member^on:character_id^inject_at:outfit_member(outfit^inject_at:outfit)";
@@ -53,7 +53,7 @@
         }
         
         viewModel.factionTag(character.faction.code_tag.toLowerCase());
-        viewModel.factionImage('https://census.soe.com' + character.faction.image_path);
+        viewModel.factionImage('https://census.daybreakgames.com' + character.faction.image_path);
         
         viewModel.statistics(null);
         viewModel.lastUpdate('');
@@ -66,7 +66,7 @@
         
         var rank = character.battle_rank.value;
         viewModel.rank(ps2.util.getComputedRank(characters_stat_history.score.all_time));
-        viewModel.rankImage('https://census.soe.com' + ps2.util.getRankImage(rank, viewModel.factionTag()));
+        viewModel.rankImage('https://census.daybreakgames.com' + ps2.util.getRankImage(rank, viewModel.factionTag()));
     }
     
     viewModel.outfit = ko.computed(function() {

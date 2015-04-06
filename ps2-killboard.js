@@ -1,7 +1,7 @@
 (function() {
 	var self = this;
 	
-    var url = "http://census.soe.com/get/ps2:v2/characters_event/?type=KILL,DEATH";
+    var url = "http://census.daybreakgames.com/get/ps2:v2/characters_event/?type=KILL,DEATH";
     url += "&c:join=character^show:character_id'name.first'battle_rank.value'faction_id^inject_at:character";
     url += "(";
     url += "characters_stat_history^on:character_id^terms:stat_name=kills^show:all_time'week.w01'week.w02^inject_at:stat_kills";

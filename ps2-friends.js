@@ -3,7 +3,7 @@
     if(!character_id)
         return;
     
-    var friendsURL = "http://census.soe.com/get/ps2:v2/characters_friend?"
+    var friendsURL = "http://census.daybreakgames.com/get/ps2:v2/characters_friend?"
     friendsURL += "c:join=character^on:friend_list.character_id^to:character_id^inject_at:character"
     friendsURL += "(";
     friendsURL += "characters_stat_history^on:character_id^inject_at:characters_stat_history^list:1"

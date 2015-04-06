@@ -6,11 +6,11 @@
     var limit = 100;
     var page = 0;
     
-    var outfitURL = "http://census.soe.com/get/ps2:v2/outfit/?";
+    var outfitURL = "http://census.daybreakgames.com/get/ps2:v2/outfit/?";
     outfitURL += "c:join=character^on:leader_character_id^to:character_id^inject_at:leader(faction^inject_at:faction^show:image_path'code_tag)";
     outfitURL += "&callback=?";
     
-    var membersURL = "http://census.soe.com/get/ps2:v2/outfit_member/?";
+    var membersURL = "http://census.daybreakgames.com/get/ps2:v2/outfit_member/?";
     membersURL += "c:join=character^on:character_id^inject_at:character";
     membersURL += "&c:join=characters_stat_history^on:character_id^inject_at:characters_stat_history^list:1";
     membersURL += "&c:join=characters_online_status^on:character_id^inject_at:characters_online_status^show:online_status";
@@ -41,7 +41,7 @@
         
         if(outfit.leader) {
           viewModel.factionTag(outfit.leader.faction.code_tag.toLowerCase());
-          viewModel.factionImage('https://census.soe.com' + outfit.leader.faction.image_path);
+          viewModel.factionImage('https://census.daybreakgames.com' + outfit.leader.faction.image_path);
         }
     };
 
