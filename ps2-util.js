@@ -18,7 +18,7 @@
     };
     
     var convertTimezone = function(unixtime) {
-        return (unixtime * 1) + 28800; // 28800 or 25200
+        return (unixtime * 1) + 25200; // 28800 or 25200
     };
     
     var getLastUpdateString = function(unixtime) {
