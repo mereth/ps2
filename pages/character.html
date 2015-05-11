@@ -1,0 +1,154 @@
+<!-- character.html -->
+<style>
+  td.br, td.kd, td.spm, td.kpm, th.br, th.kd, th.spm, th.kpm, #stats td, #stats thead th {
+    text-align: right;
+  }
+  tr.headshot td.method:last-child:after {
+    content: " (HS)";
+    color: #c00;
+    font-size: 0.8em;
+    font-weight: bold;
+  }
+  tr.suicide td.method:last-child:after {
+    content: " (Suicide)";
+    color: #c00;
+    font-size: 0.9em;
+  }
+  span.vehicle {
+    color: #00bbdd;
+  }
+  span.weapon + span.vehicle:before {
+    content: " (";
+  }
+  span.weapon + span.vehicle:after {
+    content: ")";
+  }
+</style>
+
+<header class="navbar navbar-static-top navbar-inverse {{ character.faction_tag }}" role="banner">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <div class="navbar-brand" style="background-image: url('{{ character.faction_image }}')">
+        <span style="margin-left:25px;">{{ character.name }}</span>
+        <span class="circle" data-status="{{ character.online }}" style="background-color: {{ character.online == '10' ? '#0f0' : '#f00' }}"></span>
+      </div>
+    </div>
+    <p class="navbar-text rank" style="background-image: url('{{ character.rank_image }}')">
+      <span style="margin-left:25px;">{{ character.rank }}</span>
+    </p>
+    <p class="navbar-text" >
+      <a href="#/outfit/{{ character.outfit.outfit_id }}">{{ character.outfit.label }}</a>
+    </p>
+    <p class="navbar-text">
+        <a href="#/friends/{{ character.character_id }}" class="navbar-link">Friends</a>
+    </p>
+    <form class="navbar-form navbar-right" role="search" ng-submit="submit()" ng-controller="searchController">
+      <div class="form-group">
+        <input ng-model="term" type="text" class="form-control" placeholder="Search"></input>
+      </div>
+    </form>
+  </div>
+</header>
+
+<div class="container-fluid" ng-show="character.statistics">
+  <div class="row">
+    <div class="col-xs-4">
+      <table id="stats" class="table table-condensed">
+          <thead>
+              <tr>
+                  <th>&nbsp;</th>
+                  <th>Played</th>
+                  <th>Score</th>
+                  <th>Kills</th>
+                  <th>Deaths</th>
+                  <th>K/D</th>
+                  <th>SPM</th>
+                  <th>KPM</th>
+              </tr>
+          </thead>
+          <tbody>
+              <tr id="stats_overall">
+                  <th>Overall</th>
+                  <td>{{ character.statistics.time.all_time | formatDuration }}</td>
+                  <td>{{ character.statistics.score.all_time }}</td>
+                  <td>{{ character.statistics.kills.all_time }}</td>
+                  <td>{{ character.statistics.deaths.all_time }}</td>
+                  <td>{{ character.statistics.kdr.all_time }}</td>
+                  <td>{{ character.statistics.spm.all_time }}</td>
+                  <td>{{ character.statistics.kpm.all_time }}</td>
+              </tr>
+              <tr id="stats_monthly">
+                  <th>Monthly</th>
+                  <td>{{ character.statistics.time.monthly | formatDuration }}</td>
+                  <td>{{ character.statistics.score.monthly }}</td>
+                  <td>{{ character.statistics.kills.monthly }}</td>
+                  <td>{{ character.statistics.deaths.monthly }}</td>
+                  <td>{{ character.statistics.kdr.monthly }}</td>
+                  <td>{{ character.statistics.spm.monthly }}</td>
+                  <td>{{ character.statistics.kpm.monthly }}</td>
+              </tr>
+              <tr id="stats_weekly">
+                  <th>Weekly</th>
+                  <td>{{ character.statistics.time.weekly | formatDuration }}</td>
+                  <td>{{ character.statistics.score.weekly }}</td>
+                  <td>{{ character.statistics.kills.weekly }}</td>
+                  <td>{{ character.statistics.deaths.weekly }}</td>
+                  <td>{{ character.statistics.kdr.weekly }}</td>
+                  <td>{{ character.statistics.spm.weekly }}</td>
+                  <td>{{ character.statistics.kpm.weekly }}</td>
+              </tr>
+              <tr id="stats_daily">
+                  <th>Daily</th>
+                  <td>{{ character.statistics.time.daily | formatDuration }}</td>
+                  <td>{{ character.statistics.score.daily }}</td>
+                  <td>{{ character.statistics.kills.daily }}</td>
+                  <td>{{ character.statistics.deaths.daily }}</td>
+                  <td>{{ character.statistics.kdr.daily }}</td>
+                  <td>{{ character.statistics.spm.daily }}</td>
+                  <td>{{ character.statistics.kpm.daily }}</td>
+              </tr>
+          </tbody>
+              <tfooter>
+                  <tr><td colspan="8"><small>{{ character.last_update | formatTimestamp }}</small></td></tr>
+              </tfooter>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-xs-12">
+      <table class="table table-condensed">
+          <thead>
+              <tr>
+                  <th>Time</th>
+                  <th>Player</th>
+                  <th>Outfit</th>
+                  <th class="br">Rank</th>
+                  <th class="kd">K/D</th>
+                  <th class="spm">SPM</th>
+                  <th class="kpm">KPM</th>
+                  <th>Method</th>
+              </tr>
+          </thead>
+          <tbody>
+              <tr ng-repeat="event in events" class="{{ event.css }}">
+                  <td class="time">{{ event.timestamp | formatTimestamp }}</td>
+                  <td class="name"><a href="#/character/{{ event.character_id }}">{{ event.name }}</a></td>
+                  <td class="outfit"><a ng-if="event.outfit" href="#/outfit/{{ event.outfit.outfit_id }}">{{ event.outfit.label }}</a></td>
+                  <td class="br">{{ event.rank }}</td>
+                  <td class="kd" data-bind="text: kd">{{ event.kd }}</td>
+                  <td class="spm" data-bind="text: spm">{{ event.spm }}</td>
+                  <td class="kpm" data-bind="text: kpm">{{ event.kpm }}</td>
+                  <td class="method">
+                    <span ng-if="event.weapon" class="weapon">{{ event.weapon }}</span>
+                    <span ng-if="event.vehicle" class="vehicle">{{ event.vehicle }}</span>
+                  </td>
+              </tr>
+          </tbody>
+      </table>
+      <button ng-click="getMore()">More</button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,78 @@
+<!-- home.html -->
+<div class="container">
+	<div class="row">
+		<div class="col-lg-12">
+			<h1>Search for characters or outfits...</h1>
+
+			<form ng-submit="submit()">
+				<div id="search" class="input-group">
+					<div class="input-group-addon">
+						<span class="glyphicon glyphicon-search"></span>
+					</div>
+					<input class="form-control" placeholder="eg.: desspa, [vogu] or void" ng-model="term"></input>
+					<div class="input-group-btn">
+						<input class="btn btn-default" type="submit" value="Go!"></input>
+					</div>
+				</div>
+			</form>
+			<p> </p>
+
+			<div class="row">
+				<div class="col-lg-6">
+					<div ng-show="characters.length">
+						<table class="table table-condensed table-striped">
+							<legend>Characters...</legend>
+							<thead>
+								<tr>
+									<th>Name</th>
+									<th>BR</th>
+									<th>Server</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr ng-repeat="character in characters" class="{{character.faction_id | factionCode}}">
+									<td><a href="#/character/{{ character.character_id }}">{{ character.name.first }}</a></td>
+									<td>{{ character.battle_rank.value }}</td>
+									<td>{{ worlds[character.world.world_id].label }}</td>
+								</tr>
+							</tbody>
+							<tfoot>
+								<tr ng-show="characters.length > limit">
+									<td colspan="3">and more...</td>
+								</tr>
+							</tfoot>
+						</table>
+					</div>
+				</div>
+
+				<div class="col-lg-6">
+					<div ng-show="outfits.length">
+						<table class="table table-condensed table-striped">
+							<legend>Outfits...</legend>
+							<thead>
+								<tr>
+									<th>Name</th>
+									<th>Tag</th>
+									<th>Server</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr ng-repeat="outfit in outfits" class="{{ outfit.leader.faction_id | factionCode }}">
+									<td><a href="#/outfit/{{ outfit.outfit_id }}">{{ outfit.name }}</a></td>
+									<td>{{ outfit.alias }}</td>
+									<td>{{ worlds[outfit.leader.world.world_id].label }}</td>
+								</tr>
+							</tbody>
+							<tfoot>
+								<tr ng-show="outfits.length > limit">
+									<td colspan="3">and more...</td>
+								</tr>
+							</tfoot>
+						</table>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

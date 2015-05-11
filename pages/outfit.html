@@ -1,0 +1,73 @@
+<!-- outfit.html -->
+<style>
+  th, td { text-align: right; }
+  th.name, td.name { text-align: left; }
+  th.outfitrank, td.outfitrank { text-align: left; }
+</style>
+
+<header class="navbar navbar-static-top navbar-inverse {{outfit.factionTag}}" role="banner">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <div class="navbar-brand" style="background-image: url('{{ outfit.factionImage }}')">
+        <span style="margin-left:25px;">{{ outfit.alias ? '[' + outfit.alias + '] ' : '' }}{{ outfit.name }}</span>
+      </div>
+    </div>
+    <p class="navbar-text members-count">
+      {{ outfit.membersCount }} members
+    </p>
+    <form class="navbar-form navbar-right" role="search" ng-submit="submit()" ng-controller="searchController">
+      <div class="form-group">
+        <input ng-model="term" type="text" class="form-control" placeholder="Search"></input>
+      </div>
+    </form>
+  </div>
+</header>
+
+<div class="container-fluid {{outfit.factionTag}}">
+  <div class="row">
+    <div class="col-xs-12">
+        <div class="form-group">
+          <label>Statistics coverage</label>
+          <label class="checkbox-inline"><input type="radio" value="daily" ng-model="period" /> Daily</label>
+          <label class="checkbox-inline"><input type="radio" value="weekly" ng-model="period" /> Weekly</label>
+          <label class="checkbox-inline"><input type="radio" value="monthly" ng-model="period" /> Monthly</label>
+          <label class="checkbox-inline"><input type="radio" value="all_time" ng-model="period" /> Overall</label>
+        </div>
+        <table class="table table-condensed table-hover">
+            <thead>
+                <tr>
+                    <th class="name">Name</th>
+                    <th class="outfitrank">OutfitRank</th>
+                    <th>Rank</th>
+                    <th>Played</th>
+                    <th>Score</th>
+                    <th>Kills</th>
+                    <th>Deaths</th>
+                    <th>K/D</th>
+                    <th>SPM</th>
+                    <th>KPM</th>
+                    <th>LastUpdate</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="member in members">
+                    <td class="name">
+                        <span class="circle" style="background-color: {{ member.characters_online_status == '0' ? '#f00' : '#0f0' }}"></span>
+                        <a href="#/character/{{ member.character_id }}">{{ member.name.first }}</a>
+                    </td>
+                    <td class="outfitrank">{{ member.outfitRank }}</td>
+                    <td>{{ member.rank }}</td>
+                    <td class="stat">{{ member.statistics.time[period] | formatDuration }}</td>
+                    <td class="stat">{{ member.statistics.score[period] }}</td>
+                    <td class="stat">{{ member.statistics.kills[period] }}</td>
+                    <td class="stat">{{ member.statistics.deaths[period] }}</td>
+                    <td class="stat">{{ member.statistics.kdr[period] }}</td>
+                    <td class="stat">{{ member.statistics.spm[period] }}</td>
+                    <td class="stat">{{ member.statistics.kpm[period] }}</td>
+                    <td><span title="{{ member.last_update | formatTimestamp }}">{{ member.last_update | formatTimestamp2 }}</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+  </div>
+</div>

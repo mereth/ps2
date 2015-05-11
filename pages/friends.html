@@ -1,0 +1,79 @@
+<!-- friends.html -->
+<header class="navbar navbar-static-top navbar-inverse {{ character.faction_tag }}" role="banner">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <div class="navbar-brand" style="background-image: url('{{ character.faction_image }}')">
+        <span style="margin-left:25px;">{{ character.name }}</span>
+        <span class="circle" data-status="{{ character.online }}" style="background-color: {{ character.online == '10' ? '#0f0' : '#f00' }}"></span>
+      </div>
+    </div>
+    <p class="navbar-text rank" style="background-image: url('{{ character.rank_image }}')">
+      <span style="margin-left:25px;">{{ character.rank }}</span>
+    </p>
+    <p class="navbar-text" >
+      <a href="#/outfit/{{ character.outfit.outfit_id }}">{{ character.outfit.label }}</a>
+    </p>
+    <p class="navbar-text">
+        <a href="#/character/{{ character.character_id }}" class="navbar-link">Killboard</a>
+    </p>
+    <form class="navbar-form navbar-right" role="search" ng-submit="submit()" ng-controller="searchController">
+      <div class="form-group">
+        <input ng-model="term" type="text" class="form-control" placeholder="Search"></input>
+      </div>
+    </form>
+  </div>
+</header>
+
+<div id="friends" class="container-fluid">
+  <div class="row">
+    <div class="col-xs-12">
+
+    <div class="form-group">
+      <label>Statistics coverage</label>
+      <label class="checkbox-inline"><input type="radio" value="daily" ng-model="period" /> Daily</label>
+      <label class="checkbox-inline"><input type="radio" value="weekly" ng-model="period" /> Weekly</label>
+      <label class="checkbox-inline"><input type="radio" value="monthly" ng-model="period" /> Monthly</label>
+      <label class="checkbox-inline"><input type="radio" value="all_time" ng-model="period" /> Overall</label>
+    </div>
+
+    <table class="table table-condensed table-hover">
+        <thead>
+            <tr>
+                <th class="name">Name</th>
+                <th class="outfit">Outfit</th>
+                <th>Rank</th>
+                <th>Played</th>
+                <th>Score</th>
+                <th>Kills</th>
+                <th>Deaths</th>
+                <th>K/D</th>
+                <th>SPM</th>
+                <th>KPM</th>
+                <th>LastUpdate</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="friend in friends" class="{{ friend.faction.code_tag | lowercase }}">
+                <td class="name">
+                    <span class="circle" style="background-color: {{ friend.characters_online_status == '0' ? '#f00' : '#0f0' }}"></span>
+                    <a href="#/character/{{ friend.character_id }}">{{ friend.name.first }}</a>
+                </td>
+                <td class="outfit">
+                    <a href="#/outfit/{{ friend.outfit.outfit_id }}">{{ friend.outfit.display_name }}</a>
+                </td>
+                <td>{{ friend.rank }}</td>
+                <td class="stat">{{ friend.statistics.time[period] | formatDuration }}</td>
+                <td class="stat">{{ friend.statistics.score[period] }}</td>
+                <td class="stat">{{ friend.statistics.kills[period] }}</td>
+                <td class="stat">{{ friend.statistics.deaths[period] }}</td>
+                <td class="stat">{{ friend.statistics.kdr[period] }}</td>
+                <td class="stat">{{ friend.statistics.spm[period] }}</td>
+                <td class="stat">{{ friend.statistics.kpm[period] }}</td>
+                <td>{{ friend.last_update | formatTimestamp2 }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    </div>
+  </div>
+</div>
