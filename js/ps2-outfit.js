@@ -43,7 +43,7 @@ angular
 
             character.rank = ps2Utils.getComputedRank(characters_stat_history.score.all_time);
 
-            character.last_update = characters_stat_history.score ? characters_stat_history.score.last_save : "";
+            character.last_update = characters_stat_history.score ? ps2Utils.convertTimezone(characters_stat_history.score.last_save) : "";
 
             members.push(character);
         });

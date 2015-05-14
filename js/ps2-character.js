@@ -70,7 +70,7 @@ angular
         var characters_stat_history = raw.characters_stat_history;
         if(characters_stat_history) {
             character.statistics = ps2Utils.computeStatistics(characters_stat_history);
-            character.last_update = characters_stat_history.score.last_save;
+            character.last_update =  ps2Utils.convertTimezone(characters_stat_history.score.last_save);
         }
 
         var rank = raw.battle_rank.value;
@@ -205,7 +205,7 @@ angular
 
             character.rank = ps2Utils.getComputedRank(characters_stat_history.score.all_time);
 
-            character.last_update = characters_stat_history.score ? characters_stat_history.score.last_save : "";
+            character.last_update = characters_stat_history.score ? ps2Utils.convertTimezone(characters_stat_history.score.last_save) : "";
 
             friends.push(character);
         });
