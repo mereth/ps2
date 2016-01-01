@@ -1,11 +1,11 @@
 angular
 .module('outfit', ['ps2Utils'])
 .factory('outfit', function($q, $http, ps2Utils) {
-    var OUTFIT_URL = "http://census.daybreakgames.com/get/ps2:v2/outfit/?";
+    var OUTFIT_URL = "http://census.daybreakgames.com/s:mereth/get/ps2:v2/outfit/?";
     OUTFIT_URL += "c:join=character^on:leader_character_id^to:character_id^inject_at:leader(faction^inject_at:faction^show:image_path'code_tag)";
     OUTFIT_URL += "&callback=JSON_CALLBACK";
 
-    var MEMBERS_URL = "http://census.daybreakgames.com/get/ps2:v2/outfit_member/?";
+    var MEMBERS_URL = "http://census.daybreakgames.com/s:mereth/get/ps2:v2/outfit_member/?";
     MEMBERS_URL += "c:join=character^on:character_id^inject_at:character";
     MEMBERS_URL += "&c:join=characters_stat_history^on:character_id^inject_at:characters_stat_history^list:1";
     MEMBERS_URL += "&c:join=characters_online_status^on:character_id^inject_at:characters_online_status^show:online_status";
