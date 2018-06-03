@@ -124,7 +124,7 @@ angular
 
                 model.character_id = character.character_id;
                 model.name = character.name.first;
-                model.rank = ps2Utils.getComputedRank(character.stat_score.all_time);
+                model.rank = character.stat_score ? ps2Utils.getComputedRank(character.stat_score.all_time) : 'N/A';
 
                 if(character.outfit) {
                   model.outfit = {
