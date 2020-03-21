@@ -2,7 +2,7 @@ angular
 .module('outfit', ['ps2Utils'])
 .factory('outfit', function($q, $http, ps2Utils) {
     var OUTFIT_URL = "http://census.daybreakgames.com/s:mereth/get/ps2:v2/outfit/?";
-    OUTFIT_URL += "c:join=character^on:leader_character_id^to:character_id^inject_at:leader(faction^inject_at:faction^show:image_path'code_tag)";
+    OUTFIT_URL += "c:join=character^on:leader_character_id^to:character_id^inject_at:leader";
     OUTFIT_URL += "&callback=JSON_CALLBACK";
 
     var MEMBERS_URL = "http://census.daybreakgames.com/s:mereth/get/ps2:v2/outfit_member/?";
@@ -78,8 +78,10 @@ angular
                 model.name = outfit.name;
                 model.alias = outfit.alias;
                 model.membersCount = outfit.member_count;
-                model.factionTag = outfit.leader.faction.code_tag.toLowerCase();
-                model.factionImage = 'https://census.daybreakgames.com' + outfit.leader.faction.image_path;
+                
+                var faction = ps2Utils.getFaction(outfit.leader.faction_id);
+                model.factionTag = faction.factionTag;
+                model.factionImage = faction.factionImage;
 
                 deferred.resolve(model);
             })

@@ -33,8 +33,7 @@ angular
     var FRIENDS_URL = "http://census.daybreakgames.com/s:mereth/get/ps2:v2/characters_friend?"
     FRIENDS_URL += "c:join=character^on:friend_list.character_id^to:character_id^inject_at:character"
     FRIENDS_URL += "(";
-    FRIENDS_URL += "faction^inject_at:faction^show:image_path'code_tag";
-    FRIENDS_URL += ",characters_stat_history^on:character_id^inject_at:characters_stat_history^list:1"
+    FRIENDS_URL += "characters_stat_history^on:character_id^inject_at:characters_stat_history^list:1"
     FRIENDS_URL += ",outfit_member^show:outfit_id^inject_at:outfit(outfit^show:name'alias^inject_at:details)"
     FRIENDS_URL += ")";
     FRIENDS_URL += "&callback=JSON_CALLBACK";
@@ -61,8 +60,9 @@ angular
             character.online = raw.characters_online_status.online_status;
         }
 
-        character.faction_tag = raw.faction.code_tag.toLowerCase();
-        character.faction_image = 'https://census.daybreakgames.com' + raw.faction.image_path;
+        var faction = ps2Utils.getFaction(raw.faction_id);
+        character.faction_tag = faction.factionTag;
+        character.faction_image = faction.factionImage;
 
         character.statistics = null;
         character.last_update = '';
@@ -112,15 +112,8 @@ angular
 
             model.faction = "";
             if(character) {
-                if(character.faction_id === "1") {
-                    model.faction = "vs";
-                }
-                else if(character.faction_id === "2") {
-                    model.faction = "nc";
-                }
-                else if(character.faction_id === "3") {
-                    model.faction = "tr";
-                }
+                var faction = ps2Utils.getFaction(character.faction_id);
+                model.faction = faction.factionTag;
 
                 model.character_id = character.character_id;
                 model.name = character.name.first;
