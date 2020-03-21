@@ -42,6 +42,8 @@ angular
     
     outfit.getMembers(id).then(function(members) {
         $scope.members = members;
+
+        return outfit.fillMembersStats(id, members);
     });
 })
 

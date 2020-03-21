@@ -7,11 +7,15 @@ angular
 
     var MEMBERS_URL = "http://census.daybreakgames.com/s:mereth/get/ps2:v2/outfit_member/?";
     MEMBERS_URL += "c:join=character^on:character_id^inject_at:character";
-    MEMBERS_URL += "&c:join=characters_stat_history^on:character_id^inject_at:characters_stat_history^list:1";
     MEMBERS_URL += "&c:join=characters_online_status^on:character_id^inject_at:characters_online_status^show:online_status";
     MEMBERS_URL += "&callback=JSON_CALLBACK";
 
-    var LIMIT = 200;
+    var MEMBERS_STATS_URL = "http://census.daybreakgames.com/s:mereth/get/ps2:v2/outfit_member/?";
+    MEMBERS_STATS_URL += "&c:join=characters_stat_history^on:character_id^inject_at:characters_stat_history^list:1";
+    MEMBERS_STATS_URL += "&callback=JSON_CALLBACK";
+
+    var LIMIT = 1000;
+    var LIMIT_STATS = 1000;
 
     var processMembersData = function(data) {
         // nothing to process?
@@ -27,9 +31,6 @@ angular
                 return;
             }
 
-            var characters_stat_history = _.indexBy(member.characters_stat_history, "stat_name");
-
-            character.statistics = ps2Utils.computeStatistics(characters_stat_history);
             if(member.characters_online_status) {
                 character.characters_online_status = member.characters_online_status.online_status;
             }
@@ -37,13 +38,17 @@ angular
                 character.characters_online_status = '0';
             }
 
+            character.rank = member.character.battle_rank.value;
             character.member_since = member.member_since;
             character.outfitRank = member.rank;
             character.outfitRankOrdinal = member.rank_ordinal;
 
-            character.rank = ps2Utils.getComputedRank(characters_stat_history.score.all_time);
+            //var characters_stat_history = _.indexBy(member.characters_stat_history, "stat_name");
+            //character.statistics = ps2Utils.computeStatistics(characters_stat_history);
 
-            character.last_update = characters_stat_history.score ? ps2Utils.convertTimezone(characters_stat_history.score.last_save) : "";
+            //character.rank = ps2Utils.getComputedRank(characters_stat_history.score.all_time);
+
+            //character.last_update = characters_stat_history.score ? ps2Utils.convertTimezone(characters_stat_history.score.last_save) : "";
 
             members.push(character);
         });
@@ -55,6 +60,22 @@ angular
         });
         
         return members;
+    };
+
+    var processMembersStatsData = function(members, data) {
+        // nothing to process?
+        if(!data.returned) return;
+
+        _.forEach(data.outfit_member_list, function(memberData) {
+            var character = _.find(members, function(o) { return o.character_id == memberData.character_id })
+
+            var characters_stat_history = _.indexBy(memberData.characters_stat_history, "stat_name");
+            character.statistics = ps2Utils.computeStatistics(characters_stat_history);
+
+            character.rank = ps2Utils.getComputedRank(characters_stat_history.score.all_time);
+
+            character.last_update = characters_stat_history.score ? ps2Utils.convertTimezone(characters_stat_history.score.last_save) : "";
+        });
     };
 
     return {
@@ -99,6 +120,21 @@ angular
             .success(function(data, status) {
                 var members = processMembersData(data);
                 deferred.resolve(members);
+            })
+            .error(function(data, status) {
+                deferred.reject(data || "Request failed");
+            });
+            
+            return deferred.promise;
+        }
+        ,fillMembersStats: function(id, members) {
+            var deferred = $q.defer();
+            
+            $http
+            .jsonp(MEMBERS_STATS_URL, { params: { outfit_id: id, "c:limit": LIMIT_STATS } })
+            .success(function(data, status) {
+                processMembersStatsData(members, data);
+                deferred.resolve();
             })
             .error(function(data, status) {
                 deferred.reject(data || "Request failed");
