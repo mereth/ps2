@@ -7,7 +7,6 @@ angular
     CHARACTER_URL += "&c:join=outfit_member^on:character_id^inject_at:outfit_member(outfit^inject_at:outfit)";
     CHARACTER_URL += "&c:join=characters_online_status^on:character_id^inject_at:characters_online_status^show:online_status";
     CHARACTER_URL += "&c:join=faction^inject_at:faction^show:image_path'code_tag";
-    CHARACTER_URL += "&callback=JSON_CALLBACK";
 
     var KILLBOARD_URL = "http://census.daybreakgames.com/s:mereth/get/ps2:v2/characters_event/?type=KILL,DEATH";
     KILLBOARD_URL += "&c:join=character^show:character_id'name.first'battle_rank.value'faction_id^inject_at:character";
@@ -28,7 +27,6 @@ angular
     KILLBOARD_URL += ")";
     KILLBOARD_URL += "&c:join=item^on:attacker_weapon_id^to:item_id^show:name.en'image_path^inject_at:attacker_weapon";
     KILLBOARD_URL += "&c:join=vehicle^on:attacker_vehicle_id^to:vehicle_id^show:name.en'image_path^inject_at:attacker_vehicle";
-    KILLBOARD_URL += "&callback=JSON_CALLBACK";
 
     var FRIENDS_URL = "http://census.daybreakgames.com/s:mereth/get/ps2:v2/characters_friend?"
     FRIENDS_URL += "c:join=character^on:friend_list.character_id^to:character_id^inject_at:character"
@@ -36,7 +34,6 @@ angular
     FRIENDS_URL += "characters_stat_history^on:character_id^inject_at:characters_stat_history^list:1"
     FRIENDS_URL += ",outfit_member^show:outfit_id^inject_at:outfit(outfit^show:name'alias^inject_at:details)"
     FRIENDS_URL += ")";
-    FRIENDS_URL += "&callback=JSON_CALLBACK";
 
     var transform = function transform(census_result) {
         var raw = census_result.character_list[0];
@@ -230,7 +227,7 @@ angular
             var deferred = $q.defer();
 
             $http
-            .jsonp(CHARACTER_URL, { params: { character_id: id } })
+            .get(CHARACTER_URL, { params: { character_id: id } })
             .success(function(result, status) {
                 if(result.error) return deferred.reject(result.error);
                 deferred.resolve(transform(result));
@@ -245,7 +242,7 @@ angular
             var deferred = $q.defer();
 
             $http
-            .jsonp(KILLBOARD_URL, { params: { character_id: id, 'c:limit': limit } })
+            .get(KILLBOARD_URL, { params: { character_id: id, 'c:limit': limit } })
             .success(function(result, status) {
                 if(result.error) return deferred.reject(result.error);
                 deferred.resolve(processKillboard(result));
@@ -260,7 +257,7 @@ angular
             var deferred = $q.defer();
 
             $http
-            .jsonp(FRIENDS_URL, { params: { character_id: id } })
+            .get(FRIENDS_URL, { params: { character_id: id } })
             .success(function(result, status) {
                 if(result.error) return deferred.reject(result.error);
                 deferred.resolve(processFriends(result));

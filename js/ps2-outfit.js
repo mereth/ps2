@@ -3,16 +3,13 @@ angular
 .factory('outfit', function($q, $http, ps2Utils) {
     var OUTFIT_URL = "http://census.daybreakgames.com/s:mereth/get/ps2:v2/outfit/?";
     OUTFIT_URL += "c:join=character^on:leader_character_id^to:character_id^inject_at:leader";
-    OUTFIT_URL += "&callback=JSON_CALLBACK";
 
     var MEMBERS_URL = "http://census.daybreakgames.com/s:mereth/get/ps2:v2/outfit_member/?";
     MEMBERS_URL += "c:join=character^on:character_id^inject_at:character";
     MEMBERS_URL += "&c:join=characters_online_status^on:character_id^inject_at:characters_online_status^show:online_status";
-    MEMBERS_URL += "&callback=JSON_CALLBACK";
 
     var MEMBERS_STATS_URL = "http://census.daybreakgames.com/s:mereth/get/ps2:v2/outfit_member/?";
     MEMBERS_STATS_URL += "&c:join=characters_stat_history^on:character_id^inject_at:characters_stat_history^list:1";
-    MEMBERS_STATS_URL += "&callback=JSON_CALLBACK";
 
     var LIMIT = 1000;
     var LIMIT_STATS = 1000;
@@ -83,7 +80,7 @@ angular
             var deferred = $q.defer();
 
             $http
-            .jsonp(OUTFIT_URL, { params: { outfit_id: id } })
+            .get(OUTFIT_URL, { params: { outfit_id: id } })
             .success(function(data, status) {
                 if(data.returned != 1 || !data.outfit_list) {
                     deferred.reject("Outfit not found");
@@ -116,7 +113,7 @@ angular
             var deferred = $q.defer();
             
             $http
-            .jsonp(MEMBERS_URL, { params: { outfit_id: id, "c:limit": LIMIT } })
+            .get(MEMBERS_URL, { params: { outfit_id: id, "c:limit": LIMIT } })
             .success(function(data, status) {
                 var members = processMembersData(data);
                 deferred.resolve(members);
@@ -131,7 +128,7 @@ angular
             var deferred = $q.defer();
             
             $http
-            .jsonp(MEMBERS_STATS_URL, { params: { outfit_id: id, "c:limit": LIMIT_STATS } })
+            .get(MEMBERS_STATS_URL, { params: { outfit_id: id, "c:limit": LIMIT_STATS } })
             .success(function(data, status) {
                 processMembersStatsData(members, data);
                 deferred.resolve();

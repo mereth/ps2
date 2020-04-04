@@ -1,9 +1,9 @@
 angular
 .module('search', ['ps2Utils'])
 .factory('search',  function($q, $http, ps2Utils) {
-    var WORLD_URL = "http://census.daybreakgames.com/s:mereth/get/ps2:v2/world/?c:limit=50&callback=JSON_CALLBACK";
-    var OUTFIT_URL = "http://census.daybreakgames.com/s:mereth/get/ps2:v2/outfit/?c:join=character^on:leader_character_id^to:character_id^inject_at:leader^show:faction_id'world(characters_world^inject_at:world)&callback=JSON_CALLBACK";
-    var CHARACTER_URL = "http://census.daybreakgames.com/s:mereth/get/ps2:v2/character/?c:join=characters_world^inject_at:world&c:show=character_id,name,battle_rank,world,faction_id&callback=JSON_CALLBACK";
+    var WORLD_URL = "http://census.daybreakgames.com/s:mereth/get/ps2:v2/world/?c:limit=50";
+    var OUTFIT_URL = "http://census.daybreakgames.com/s:mereth/get/ps2:v2/outfit/?c:join=character^on:leader_character_id^to:character_id^inject_at:leader^show:faction_id'world(characters_world^inject_at:world)";
+    var CHARACTER_URL = "http://census.daybreakgames.com/s:mereth/get/ps2:v2/character/?c:join=characters_world^inject_at:world&c:show=character_id,name,battle_rank,world,faction_id";
 
     var LIMIT = 20;
 
@@ -62,7 +62,7 @@ angular
             term = '*' + filterTerm(term);
 
             $http
-            .jsonp(CHARACTER_URL, { params: { "name.first_lower": term, "c:limit": LIMIT+1 } })
+            .get(CHARACTER_URL, { params: { "name.first_lower": term, "c:limit": LIMIT+1 } })
             .success(function(result, status) {
                 if(result.error) {
                     deferred.reject(result.error);
@@ -95,7 +95,7 @@ angular
             }
 
             $http
-            .jsonp(OUTFIT_URL, { params: searchParams })
+            .get(OUTFIT_URL, { params: searchParams })
             .success(function(result, status) {
                 if(result.error) {
                     deferred.reject(result.error);
@@ -113,7 +113,7 @@ angular
             var deferred = $q.defer();
 
             $http
-            .jsonp(WORLD_URL)
+            .get(WORLD_URL)
             .success(function(result, status) {
                 if(result.error) {
                     deferred.reject(result.error);
