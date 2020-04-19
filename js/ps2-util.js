@@ -7,7 +7,7 @@ angular
         "1": {  factionTag: 'vs', factionImage: 'images/vs_32x32.png' },
         "2": {  factionTag: 'nc', factionImage: 'images/nc_32x32.png' },
         "3": {  factionTag: 'tr', factionImage: 'images/tr_32x32.png' },
-        "_": {  factionTag: 'ns', factionImage: 'https://fakeimg.pl/32x32/777/' }
+        "4": {  factionTag: 'nso', factionImage: 'https://fakeimg.pl/32x32/777/000/?retina=1&font_size=16&text=NSO' }
     }
 
     var getRankImage = function(rank, faction) {
