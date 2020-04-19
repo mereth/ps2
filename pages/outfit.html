@@ -57,14 +57,15 @@
                     </td>
                     <td class="outfitrank">{{ member.outfitRank }}</td>
                     <td>{{ member.rank }}</td>
-                    <td class="stat">{{ member.statistics.time[period] | formatDuration }}</td>
-                    <td class="stat">{{ member.statistics.score[period] }}</td>
-                    <td class="stat">{{ member.statistics.kills[period] }}</td>
-                    <td class="stat">{{ member.statistics.deaths[period] }}</td>
-                    <td class="stat">{{ member.statistics.kdr[period] }}</td>
-                    <td class="stat">{{ member.statistics.spm[period] }}</td>
-                    <td class="stat">{{ member.statistics.kpm[period] }}</td>
-                    <td><span title="{{ member.last_update | formatTimestamp }}">{{ member.last_update | formatTimestamp2 }}</span></td>
+                    <td class="stat" ng-if="member.statistics">{{ member.statistics.time[period] | formatDuration }}</td>
+                    <td class="stat" ng-if="member.statistics">{{ member.statistics.score[period] }}</td>
+                    <td class="stat" ng-if="member.statistics">{{ member.statistics.kills[period] }}</td>
+                    <td class="stat" ng-if="member.statistics">{{ member.statistics.deaths[period] }}</td>
+                    <td class="stat" ng-if="member.statistics">{{ member.statistics.kdr[period] }}</td>
+                    <td class="stat" ng-if="member.statistics">{{ member.statistics.spm[period] }}</td>
+                    <td class="stat" ng-if="member.statistics">{{ member.statistics.kpm[period] }}</td>
+                    <td ng-if="member.statistics"><span title="{{ member.last_update | formatTimestamp }}">{{ member.last_update | formatTimestamp2 }}</span></td>
+                    <td ng-if="!member.statistics" colspan="8" style="text-align: center;">loading (or not)...</td>
                 </tr>
             </tbody>
         </table>

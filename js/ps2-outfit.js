@@ -24,7 +24,7 @@ angular
             var character = member.character;
 
             if(!character) {
-                if(console.log) console.log("character '" + member.character_id + "' not found.");
+                if(console.log) console.log("character '" + member.character_id + "' not found.", member);
                 return;
             }
 
@@ -65,6 +65,11 @@ angular
 
         _.forEach(data.outfit_member_list, function(memberData) {
             var character = _.find(members, function(o) { return o.character_id == memberData.character_id })
+
+            if(!character) {
+                if(console.log) console.log("character '" + memberData.character_id + "' not found.", memberData);
+                return;
+            }
 
             var characters_stat_history = _.indexBy(memberData.characters_stat_history, "stat_name");
             character.statistics = ps2Utils.computeStatistics(characters_stat_history);
