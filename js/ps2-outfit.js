@@ -11,7 +11,7 @@ angular
     var MEMBERS_STATS_URL = "http://census.daybreakgames.com/s:mereth/get/ps2:v2/outfit_member/?";
     MEMBERS_STATS_URL += "&c:join=characters_stat_history^on:character_id^inject_at:characters_stat_history^list:1";
 
-    var LIMIT = 1000;
+    var LIMIT = 2000;
     var LIMIT_STATS = 1000;
 
     var processMembersData = function(data) {
