@@ -116,19 +116,19 @@ angular
                 model.name = character.name.first;
                 model.rank = character.stat_score ? ps2Utils.getComputedRank(character.stat_score.all_time) : 'N/A';
 
-                if(character.outfit) {
-                  model.outfit = {
-                    outfit_id: character.outfit.outfit_id
-                    ,name: character.outfit.details.name
-                    ,alias: character.outfit.details.alias
-                  };
+                if(character.outfit && character.outfit.details) {
+                    model.outfit = {
+                        outfit_id: character.outfit.outfit_id
+                        ,name: character.outfit.details.name
+                        ,alias: character.outfit.details.alias
+                    };
 
-                  if(model.outfit.alias) {
-                    model.outfit.label = "[" + model.outfit.alias + "] " + model.outfit.name;
-                        }
-                  else {
-                    model.outfit.label = model.outfit.name;
-                  }
+                    if(model.outfit.alias) {
+                        model.outfit.label = "[" + model.outfit.alias + "] " + model.outfit.name;
+                            }
+                    else {
+                        model.outfit.label = model.outfit.name;
+                    }
                 }
 
                 model.kd = ratio(character.stat_kills, character.stat_deaths).toFixed(2);
@@ -183,7 +183,7 @@ angular
             }
 
             var outfit = character.outfit;
-            if(outfit) {
+            if(outfit && outfit.details) {
                 outfit.display_name = outfit.details.name;
                 if(outfit.details.alias) {
                     outfit.display_name = "[" + outfit.details.alias + "] " + outfit.display_name;
