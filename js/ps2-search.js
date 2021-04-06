@@ -1,6 +1,6 @@
 angular
 .module('search', ['ps2Utils'])
-.factory('search',  function($q, $http, ps2Utils) {
+.factory('search', ['$q', '$http', 'ps2Utils', function($q, $http, ps2Utils) {
     var WORLD_URL = "http://census.daybreakgames.com/s:mereth/get/ps2:v2/world/?c:limit=50";
     var OUTFIT_URL = "http://census.daybreakgames.com/s:mereth/get/ps2:v2/outfit/?c:join=character^on:leader_character_id^to:character_id^inject_at:leader^show:faction_id'world(characters_world^inject_at:world)";
     var CHARACTER_URL = "http://census.daybreakgames.com/s:mereth/get/ps2:v2/character/?c:join=characters_world^inject_at:world&c:show=character_id,name,battle_rank,world,faction_id";
@@ -131,4 +131,4 @@ angular
             return LIMIT;
       }
     }
-});
+}]);

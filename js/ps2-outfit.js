@@ -1,6 +1,6 @@
 angular
 .module('outfit', ['ps2Utils'])
-.factory('outfit', function($q, $http, ps2Utils) {
+.factory('outfit', ['$q', '$http', 'ps2Utils', function($q, $http, ps2Utils) {
     var OUTFIT_URL = "http://census.daybreakgames.com/s:mereth/get/ps2:v2/outfit/?";
     OUTFIT_URL += "c:join=character^on:leader_character_id^to:character_id^inject_at:leader";
 
@@ -145,4 +145,4 @@ angular
             return deferred.promise;
         }
     };
-});
+}]);

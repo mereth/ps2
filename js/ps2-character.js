@@ -1,6 +1,6 @@
 angular
 .module('character', ['ps2Utils'])
-.factory('character',  function($q, $http, ps2Utils) {
+.factory('character', ['$q', '$http', 'ps2Utils', function($q, $http, ps2Utils) {
     var CHARACTER_URL = "http://census.daybreakgames.com/s:mereth/get/ps2:v2/character/?";
     CHARACTER_URL += "c:join=characters_stat_history^list:1^inject_at:characters_stat_history";
     CHARACTER_URL += "&c:tree=start:characters_stat_history^field:stat_name";
@@ -269,4 +269,4 @@ angular
             return deferred.promise;
         }
   }
-});
+}]);

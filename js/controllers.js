@@ -1,7 +1,9 @@
+const moment = require('moment');
+
 angular
 .module('ps2Controllers', ['search', 'outfit', 'character'])
 
-.controller('mainController', function($scope, $routeParams, search) {
+.controller('mainController', ['$scope', '$routeParams', 'search', function($scope, $routeParams, search) {
     $scope.term = $routeParams.term;
     $scope.limit = search.getLimit();
 
@@ -21,16 +23,16 @@ angular
     if($scope.term) {
         $scope.submit();
     }
-})
+}])
 
-.controller('searchController', function($scope, $location) {
+.controller('searchController', ['$scope', '$location', function($scope, $location) {
     $scope.term = '';
     $scope.submit = function() {
         $location.path('/').search({term: $scope.term});
     };
-})
+}])
 
-.controller('outfitController', function($scope, $rootScope, $routeParams, outfit) {
+.controller('outfitController', ['$scope', '$rootScope', '$routeParams', 'outfit', function($scope, $rootScope, $routeParams, outfit) {
     var id = $routeParams.id;
 
     $scope.period = 'weekly';
@@ -45,9 +47,9 @@ angular
 
         return outfit.fillMembersStats(id, members);
     });
-})
+}])
 
-.controller('characterController', function($scope, $rootScope, $routeParams, character) {
+.controller('characterController', ['$scope', '$rootScope', '$routeParams', 'character', function($scope, $rootScope, $routeParams, character) {
     var id = $routeParams.id;
 
     $scope.limit = 100;
@@ -66,9 +68,9 @@ angular
     character.getKillboard(id, $scope.limit).then(function(events) {
         $scope.events = events;
     });
-})
+}])
 
-.controller('friendsController', function($scope, $rootScope, $routeParams, character) {
+.controller('friendsController', ['$scope', '$rootScope', '$routeParams', 'character', function($scope, $rootScope, $routeParams, character) {
     var id = $routeParams.id;
 
     $scope.period = 'weekly';
@@ -81,7 +83,7 @@ angular
     character.getFriends(id).then(function(friends) {
         $scope.friends = friends;
     });
-})
+}])
 
 .filter('formatDuration', function() {
     return function(seconds) {

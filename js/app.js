@@ -1,23 +1,36 @@
+
+const angular = require('angular');
+require('angular-route');
+require('lodash');
+
+require('bootstrap/dist/css/bootstrap.min.css');
+require('../styles.css');
+
 var ps2App = angular.module('ps2App', ['ngRoute', 'ps2Controllers']);
 
 // configure our routes
-ps2App.config(function($routeProvider) {
+ps2App.config(['$routeProvider', function($routeProvider) {
     $routeProvider
     .when('/', {
-        templateUrl : 'pages/home.html',
-        controller  : 'mainController'
+        template: require('../pages/home.html'),
+        controller: 'mainController'
     })
     .when('/outfit/:id', {
-        templateUrl : 'pages/outfit.html',
-        controller  : 'outfitController'
+        template: require('../pages/outfit.html'),
+        controller: 'outfitController'
     })
     .when('/character/:id', {
-        templateUrl : 'pages/character.html',
-        controller  : 'characterController'
+        template : require('../pages/character.html'),
+        controller: 'characterController'
     })
     .when('/friends/:id', {
-        templateUrl : 'pages/friends.html',
-        controller  : 'friendsController'
-    })
-    ;
-});
+        templateUrl: require('../pages/friends.html'),
+        controller: 'friendsController'
+    });
+}]);
+
+require('./controllers');
+require('./ps2-character');
+require('./ps2-outfit');
+require('./ps2-search');
+require('./ps2-util');
