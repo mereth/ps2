@@ -24,9 +24,13 @@ ps2App.config(['$routeProvider', function($routeProvider) {
         controller: 'characterController'
     })
     .when('/friends/:id', {
-        templateUrl: require('../pages/friends.html'),
+        template: require('../pages/friends.html'),
         controller: 'friendsController'
     });
+}]);
+
+ps2App.config(['$locationProvider', function($locationProvider) {
+    $locationProvider.hashPrefix('');
 }]);
 
 require('./controllers');

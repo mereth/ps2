@@ -63,15 +63,16 @@ angular
 
             $http
             .get(CHARACTER_URL, { params: { "name.first_lower": term, "c:limit": LIMIT+1 } })
-            .success(function(result, status) {
+            .then(function(response) {
+                var result = response.data;
                 if(result.error) {
                     deferred.reject(result.error);
                     return;
                 }
                 deferred.resolve(processResult(result));
             })
-            .error(function(data, status) {
-                deferred.reject(data || "Request failed");
+            .catch(function(response) {
+                deferred.reject(response.data || "Request failed");
             });
 
             return deferred.promise;
@@ -96,15 +97,16 @@ angular
 
             $http
             .get(OUTFIT_URL, { params: searchParams })
-            .success(function(result, status) {
+            .then(function(response) {
+                var result = response.data;
                 if(result.error) {
                     deferred.reject(result.error);
                     return;
                 }
                 deferred.resolve(processResult(result));
             })
-            .error(function(data, status) {
-                deferred.reject(data || "Request failed");
+            .catch(function(response) {
+                deferred.reject(response.data || "Request failed");
             });
 
             return deferred.promise;
@@ -114,15 +116,16 @@ angular
 
             $http
             .get(WORLD_URL)
-            .success(function(result, status) {
+            .then(function(response) {
+                var result = response.data;
                 if(result.error) {
                     deferred.reject(result.error);
                     return;
                 }
                 deferred.resolve(processWorldList(result));
             })
-            .error(function(data, status) {
-                deferred.reject(data || "Request failed");
+            .catch(function(response) {
+                deferred.reject(response.data || "Request failed");
             });
 
             return deferred.promise;

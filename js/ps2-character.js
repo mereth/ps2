@@ -228,12 +228,13 @@ angular
 
             $http
             .get(CHARACTER_URL, { params: { character_id: id } })
-            .success(function(result, status) {
+            .then(function(response) {
+                var result = response.data;
                 if(result.error) return deferred.reject(result.error);
                 deferred.resolve(transform(result));
             })
-            .error(function(data, status) {
-                deferred.reject(data || "Request failed");
+            .catch(function(response) {
+                deferred.reject(response.data || "Request failed");
             });
 
             return deferred.promise;
@@ -243,12 +244,13 @@ angular
 
             $http
             .get(KILLBOARD_URL, { params: { character_id: id, 'c:limit': limit } })
-            .success(function(result, status) {
+            .then(function(response) {
+                var result = response.data;
                 if(result.error) return deferred.reject(result.error);
                 deferred.resolve(processKillboard(result));
             })
-            .error(function(data, status) {
-                deferred.reject(data || "Request failed");
+            .catch(function(response) {
+                deferred.reject(response.data || "Request failed");
             });
 
             return deferred.promise;
@@ -258,12 +260,13 @@ angular
 
             $http
             .get(FRIENDS_URL, { params: { character_id: id } })
-            .success(function(result, status) {
+            .then(function(response) {
+                var result = response.data;
                 if(result.error) return deferred.reject(result.error);
                 deferred.resolve(processFriends(result));
             })
-            .error(function(data, status) {
-                deferred.reject(data || "Request failed");
+            .catch(function(response) {
+                deferred.reject(response.data || "Request failed");
             });
 
             return deferred.promise;

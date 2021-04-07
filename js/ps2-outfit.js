@@ -86,7 +86,8 @@ angular
 
             $http
             .get(OUTFIT_URL, { params: { outfit_id: id } })
-            .success(function(data, status) {
+            .then(function(response) {
+                var data = response.data;
                 if(data.returned != 1 || !data.outfit_list) {
                     deferred.reject("Outfit not found");
                     return;
@@ -108,8 +109,8 @@ angular
 
                 deferred.resolve(model);
             })
-            .error(function(data, status) {
-                deferred.reject(data || "Request failed");
+            .catch(function(response) {
+                deferred.reject(response.data || "Request failed");
             });
 
             return deferred.promise;
@@ -119,12 +120,13 @@ angular
             
             $http
             .get(MEMBERS_URL, { params: { outfit_id: id, "c:limit": LIMIT } })
-            .success(function(data, status) {
+            .then(function(response) {
+                var data = response.data;
                 var members = processMembersData(data);
                 deferred.resolve(members);
             })
-            .error(function(data, status) {
-                deferred.reject(data || "Request failed");
+            .catch(function(response) {
+                deferred.reject(response.data || "Request failed");
             });
             
             return deferred.promise;
@@ -134,12 +136,13 @@ angular
             
             $http
             .get(MEMBERS_STATS_URL, { params: { outfit_id: id, "c:limit": LIMIT_STATS } })
-            .success(function(data, status) {
+            .then(function(response) {
+                var data = response.data;
                 processMembersStatsData(members, data);
                 deferred.resolve();
             })
-            .error(function(data, status) {
-                deferred.reject(data || "Request failed");
+            .catch(function(response) {
+                deferred.reject(response.data || "Request failed");
             });
             
             return deferred.promise;
