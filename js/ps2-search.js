@@ -28,7 +28,7 @@ angular
     var processWorldList = function(result) {
         var worlds = [];
 
-        _.forEach(result.world_list, function(world) {
+        result.world_list.forEach(function(world) {
             var region = "?";
             if(world.world_id === "10" || world.world_id === "13") {
                 region = "EU";

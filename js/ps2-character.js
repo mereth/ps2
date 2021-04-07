@@ -79,7 +79,7 @@ angular
 
     var processKillboard = function processKillboard(census_result) {
         var events = [];
-        _.forEach(census_result.characters_event_list, function(event) {
+        census_result.characters_event_list.forEach(function(event) {
             var model = {};
 
             model.type = event.table_type;
@@ -164,7 +164,7 @@ angular
         // nothing to process?
         if(!data.returned) return;
 
-        _.forEach(data.characters_friend_list[0].friend_list, function(friend) {
+        data.characters_friend_list[0].friend_list.forEach(function(friend) {
             var character = friend.character;
 
             if(!character) {
@@ -172,7 +172,10 @@ angular
                 return;
             }
 
-            var characters_stat_history = _.indexBy(character.characters_stat_history, "stat_name");
+            var characters_stat_history = character.characters_stat_history.reduce(function (obj, statsEntry) {
+                obj[statsEntry.stat_name] = statsEntry;
+                return obj;
+            }, {});
 
             character.statistics = ps2Utils.computeStatistics(characters_stat_history);
             if(friend.online) {

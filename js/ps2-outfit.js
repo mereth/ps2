@@ -20,7 +20,7 @@ angular
 
         var members = [];
         
-        _.forEach(data.outfit_member_list, function(member) {
+        data.outfit_member_list.forEach(function(member) {
             var character = member.character;
 
             if(!character) {
@@ -40,13 +40,6 @@ angular
             character.outfitRank = member.rank;
             character.outfitRankOrdinal = member.rank_ordinal;
 
-            //var characters_stat_history = _.indexBy(member.characters_stat_history, "stat_name");
-            //character.statistics = ps2Utils.computeStatistics(characters_stat_history);
-
-            //character.rank = ps2Utils.getComputedRank(characters_stat_history.score.all_time);
-
-            //character.last_update = characters_stat_history.score ? ps2Utils.convertTimezone(characters_stat_history.score.last_save) : "";
-
             members.push(character);
         });
 
@@ -63,15 +56,19 @@ angular
         // nothing to process?
         if(!data.returned) return;
 
-        _.forEach(data.outfit_member_list, function(memberData) {
-            var character = _.find(members, function(o) { return o.character_id == memberData.character_id })
+        data.outfit_member_list.forEach(function(memberData) {
+            var character = members.find(function(o) { return o.character_id == memberData.character_id })
 
             if(!character) {
                 if(console.log) console.log("character '" + memberData.character_id + "' not found.", memberData);
                 return;
             }
 
-            var characters_stat_history = _.indexBy(memberData.characters_stat_history, "stat_name");
+            var characters_stat_history = memberData.characters_stat_history.reduce(function (obj, statsEntry) {
+                obj[statsEntry.stat_name] = statsEntry;
+                return obj;
+            }, {});
+
             character.statistics = ps2Utils.computeStatistics(characters_stat_history);
 
             character.rank = ps2Utils.getComputedRank(characters_stat_history.score.all_time);

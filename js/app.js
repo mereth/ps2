@@ -1,7 +1,6 @@
 
 const angular = require('angular');
 require('angular-route');
-require('lodash');
 
 require('bootstrap/dist/css/bootstrap.min.css');
 require('../styles.css');
