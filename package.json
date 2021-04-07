@@ -19,6 +19,6 @@
     "angular": "^1.8.2",
     "angular-route": "^1.8.2",
     "bootstrap": "^3.3.4",
-    "moment": "^2.9.0"
+    "luxon": "^1.26.0"
   }
 }

@@ -1,4 +1,4 @@
-const moment = require('moment');
+var { DateTime, Duration } = require('luxon');
 
 angular
 .module('ps2Controllers', ['search', 'outfit', 'character'])
@@ -87,25 +87,26 @@ angular
 
 .filter('formatDuration', function() {
     return function(seconds) {
-        var m = moment.duration(seconds, 's');
+        var m = Duration.fromObject({ seconds: seconds })
+            .shiftTo('days', 'hours', 'minutes', 'seconds', 'milliseconds');
 
         var str = "";
         var count = 2;
-        var days = Math.floor(m.asDays());
+        var days = Math.floor(m.days);
         if(days > 0) {
             str = str + days + "d ";
             count--;
         }
-        if(m.hours() > 0) {
-            str = str + Math.floor(m.hours()) + "h ";
+        if(m.hours > 0) {
+            str = str + Math.floor(m.hours) + "h ";
             if(--count === 0) return str;
         }
-        if(m.minutes() > 0) {
-            str = str + Math.floor(m.minutes()) + "m ";
+        if(m.minutes > 0) {
+            str = str + Math.floor(m.minutes) + "m ";
             if(--count === 0) return str;
         }
-        if(m.seconds() > 0) {
-            str = str + Math.floor(m.seconds()) + "s ";
+        if(m.seconds > 0) {
+            str = str + Math.floor(m.seconds) + "s ";
             if(--count === 0) return str;
         }
 
@@ -114,20 +115,20 @@ angular
 })
 
 .filter('formatTimestamp', function() {
-    var limit = moment().subtract(1, 'months');
+    var limit = DateTime.now().minus({ month: 1 });
     return function(timestamp) {
-        var m = moment.unix(timestamp);
+        var time = DateTime.fromSeconds(Number(timestamp));
 
-        if(m.isAfter(limit))
-            return moment.unix(timestamp).format("MMM D, HH:mm:ss");
+        if(time > limit)
+            return time.toFormat("LLL d, HH:mm:ss");
         else
-            return moment.unix(timestamp).format("YYYY MMM D");
+            return time.toLocaleString(DateTime.DATE_MED);
     }
 })
 
 .filter('formatTimestamp2', function() {
     return function(timestamp) {
-        return moment.unix(timestamp).fromNow();
+        return DateTime.fromSeconds(Number(timestamp)).toRelative();
     }
 })
 
