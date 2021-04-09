@@ -1,3 +1,5 @@
+var { DateTime } = require('luxon');
+
 angular
 .module('ps2Utils', [])
 .factory('ps2Utils',  function() {
@@ -48,8 +50,12 @@ angular
         return rank;
     };
 
-    var convertTimezone = function(unixtime) {
-        return (unixtime * 1) + 25200; // 28800 or 25200
+    var fixTimestamp = function(date) {
+        // convert dates from california iana zone
+        var muricaTime = DateTime.fromISO(date.replace(' ', 'T'))
+            .setZone('America/Los_Angeles', { keepLocalTime: true});
+        var utcSeconds = muricaTime.toSeconds();
+        return utcSeconds;
     };
 
     var computeStatistics = function(stats) {
@@ -139,7 +145,7 @@ angular
         computeStatistics: computeStatistics
       , getRankImage: getRankImage
       , getComputedRank: getComputedRank
-      , convertTimezone: convertTimezone
+      , fixTimestamp: fixTimestamp
       , getFaction: getFaction
     };
 });
