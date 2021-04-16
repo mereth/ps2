@@ -1,4 +1,40 @@
 var { DateTime, Duration } = require('luxon');
+var { Grid } = require('ag-grid-community');
+
+var formatDuration = function formatDuration(seconds) {
+    if (seconds == null) {
+        return;
+    }
+    
+    var m = Duration.fromObject({ seconds: seconds })
+        .shiftTo('days', 'hours', 'minutes', 'seconds', 'milliseconds');
+
+    var str = "";
+    var count = 2;
+    var days = Math.floor(m.days);
+    if(days > 0) {
+        str = str + days + "d ";
+        count--;
+    }
+    if(m.hours > 0) {
+        str = str + Math.floor(m.hours) + "h ";
+        if(--count === 0) return str;
+    }
+    if(m.minutes > 0) {
+        str = str + Math.floor(m.minutes) + "m ";
+        if(--count === 0) return str;
+    }
+    if(m.seconds > 0) {
+        str = str + Math.floor(m.seconds) + "s ";
+        if(--count === 0) return str;
+    }
+
+    return str;
+};
+
+var toRelative = function toRelative(timestamp) {
+    return DateTime.fromSeconds(Number(timestamp)).toRelative();
+}
 
 angular
 .module('ps2Controllers', ['search', 'outfit', 'character'])
@@ -37,6 +73,46 @@ angular
 
     $scope.period = 'weekly';
 
+    const gridOptions = {
+        domLayout: 'autoHeight',
+        defaultColDef: {
+            sortable: true
+        },
+        columnDefs: [
+            {
+                headerName: 'Name',
+                field: 'name.first',
+                filter: 'agTextColumnFilter',
+                cellRenderer: function(params) {
+                    return '<a href="#/character/' + params.data.character_id + '">'+ params.value + '</a>'
+                }
+            },
+            {
+                headerName: 'Online Status',
+                field: 'characters_online_status',
+                filter: 'agTextColumnFilter',
+                cellRenderer: function(params) {
+                    return params.value == "0" ?
+                        '<span class="circle" style="background-color: #f00"></span> (' + params.value + ')' :
+                        '<span class="circle" style="background-color: #0f0"></span> (' + params.value + ')'
+                }
+            },
+            { headerName: 'Outfit Rank', field: 'outfitRank', filter: 'agTextColumnFilter' },
+            { headerName: 'Rank', field: 'rank', type: 'rightAligned' },
+            { colId: 'time', headerName: 'Played', field: 'statistics.time.weekly', type: 'rightAligned', valueFormatter: function(params) { return formatDuration(params.value); } },
+            { colId: 'score', headerName: 'Score', field: 'statistics.score.weekly', type: 'rightAligned', valueFormatter: function(params) { return params.value != null ? params.value.toLocaleString() : null; } },
+            { colId: 'kills', headerName: 'Kills', field: 'statistics.kills.weekly', type: 'rightAligned', valueFormatter: function(params) { return params.value != null ? params.value.toLocaleString() : null; } },
+            { colId: 'deaths', headerName: 'Deaths', field: 'statistics.deaths.weekly', type: 'rightAligned', valueFormatter: function(params) { return params.value != null ? params.value.toLocaleString() : null; } },
+            { colId: 'kdr', headerName: 'K/D', field: 'statistics.kdr.weekly', type: 'rightAligned', valueFormatter: function(params) { return params.value != null ? params.value.toFixed(2) : null; } },
+            { colId: 'spm', headerName: 'SPM', field: 'statistics.spm.weekly', type: 'rightAligned' },
+            { colId: 'kpm', headerName: 'KPM', field: 'statistics.kpm.weekly', type: 'rightAligned', valueFormatter: function(params) { return params.value != null ? params.value.toFixed(2) : null; } },
+            { colId: 'last_update', headerName: 'LastUpdate', field: 'last_update', type: 'rightAligned', valueFormatter: function(params) { return toRelative(params.value); } },
+        ]
+    };
+
+    var eGridDiv = document.querySelector('#myGrid');
+    new Grid(eGridDiv, gridOptions);
+
     outfit.get(id).then(function(outfit) {
         $scope.outfit = outfit;
         $rootScope.title = outfit.name;
@@ -44,12 +120,34 @@ angular
     
     outfit.getMembers(id).then(function(members) {
         $scope.members = members;
-
+        gridOptions.api.setRowData($scope.members);
+        gridOptions.api.sizeColumnsToFit();
         return outfit.fillMembersStats(id, members);
+    })
+    .then(function() {
+        gridOptions.api.setRowData($scope.members);
+        gridOptions.api.sizeColumnsToFit();
+    });
+
+    $scope.$watch('period', function(newVal, oldVal) {
+        if (newVal != oldVal) {
+            var colDefs = gridOptions.api.getColumnDefs();
+            colDefs.forEach(function (coldDef) {
+                coldDef.field = coldDef.field.replace(oldVal, newVal);
+            });
+            gridOptions.api.setColumnDefs(colDefs);
+            gridOptions.api.setRowData($scope.members);
+        };
+    });
+
+    $scope.$on('$destroy', function() {
+        if (gridOptions.api) {
+            gridOptions.api.destroy();
+        }
     });
 }])
 
-.controller('characterController', ['$scope', '$rootScope', '$routeParams', 'character', function($scope, $rootScope, $routeParams, character) {
+.controller('characterController', ['$scope', '$rootScope', '$routeParams', '$document', 'character', function($scope, $rootScope, $routeParams, $document, character) {
     var id = $routeParams.id;
 
     $scope.limit = 100;
@@ -86,32 +184,7 @@ angular
 }])
 
 .filter('formatDuration', function() {
-    return function(seconds) {
-        var m = Duration.fromObject({ seconds: seconds })
-            .shiftTo('days', 'hours', 'minutes', 'seconds', 'milliseconds');
-
-        var str = "";
-        var count = 2;
-        var days = Math.floor(m.days);
-        if(days > 0) {
-            str = str + days + "d ";
-            count--;
-        }
-        if(m.hours > 0) {
-            str = str + Math.floor(m.hours) + "h ";
-            if(--count === 0) return str;
-        }
-        if(m.minutes > 0) {
-            str = str + Math.floor(m.minutes) + "m ";
-            if(--count === 0) return str;
-        }
-        if(m.seconds > 0) {
-            str = str + Math.floor(m.seconds) + "s ";
-            if(--count === 0) return str;
-        }
-
-        return str;
-    };
+    return formatDuration;
 })
 
 .filter('formatTimestamp', function() {
@@ -126,10 +199,8 @@ angular
     }
 })
 
-.filter('formatTimestamp2', function() {
-    return function(timestamp) {
-        return DateTime.fromSeconds(Number(timestamp)).toRelative();
-    }
+.filter('toRelative', function() {
+    return toRelative;
 })
 
 .filter('factionCode', function() {

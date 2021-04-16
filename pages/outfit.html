@@ -4,7 +4,6 @@
   th.name, td.name { text-align: left; }
   th.outfitrank, td.outfitrank { text-align: left; }
 </style>
-
 <header class="navbar navbar-static-top navbar-inverse {{outfit.factionTag}}" role="banner">
   <div class="container-fluid">
     <div class="navbar-header">
@@ -33,42 +32,8 @@
           <label class="checkbox-inline"><input type="radio" value="monthly" ng-model="period" /> Monthly</label>
           <label class="checkbox-inline"><input type="radio" value="all_time" ng-model="period" /> Overall</label>
         </div>
-        <table class="table table-condensed table-hover">
-            <thead>
-                <tr>
-                    <th class="name">Name</th>
-                    <th class="outfitrank">OutfitRank</th>
-                    <th>Rank</th>
-                    <th>Played</th>
-                    <th>Score</th>
-                    <th>Kills</th>
-                    <th>Deaths</th>
-                    <th>K/D</th>
-                    <th>SPM</th>
-                    <th>KPM</th>
-                    <th>LastUpdate</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr ng-repeat="member in members">
-                    <td class="name">
-                        <span class="circle" style="background-color: {{ member.characters_online_status == '0' ? '#f00' : '#0f0' }}"></span>
-                        <a href="#/character/{{ member.character_id }}">{{ member.name.first }}</a>
-                    </td>
-                    <td class="outfitrank">{{ member.outfitRank }}</td>
-                    <td>{{ member.rank }}</td>
-                    <td class="stat" ng-if="member.statistics">{{ member.statistics.time[period] | formatDuration }}</td>
-                    <td class="stat" ng-if="member.statistics">{{ member.statistics.score[period] }}</td>
-                    <td class="stat" ng-if="member.statistics">{{ member.statistics.kills[period] }}</td>
-                    <td class="stat" ng-if="member.statistics">{{ member.statistics.deaths[period] }}</td>
-                    <td class="stat" ng-if="member.statistics">{{ member.statistics.kdr[period] }}</td>
-                    <td class="stat" ng-if="member.statistics">{{ member.statistics.spm[period] }}</td>
-                    <td class="stat" ng-if="member.statistics">{{ member.statistics.kpm[period] }}</td>
-                    <td ng-if="member.statistics"><span title="{{ member.last_update | formatTimestamp }}">{{ member.last_update | formatTimestamp2 }}</span></td>
-                    <td ng-if="!member.statistics" colspan="8" style="text-align: center;">loading (or not)...</td>
-                </tr>
-            </tbody>
-        </table>
+
+        <div id="myGrid" class="ag-theme-alpine" style="width: 100%; height: 100%;"></div>
     </div>
   </div>
 </div>

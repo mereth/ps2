@@ -69,7 +69,7 @@
                 <td class="stat">{{ friend.statistics.kdr[period] }}</td>
                 <td class="stat">{{ friend.statistics.spm[period] }}</td>
                 <td class="stat">{{ friend.statistics.kpm[period] }}</td>
-                <td><span title="{{ friend.last_update | formatTimestamp }}">{{ friend.last_update | formatTimestamp2 }}</span></td>
+                <td><span title="{{ friend.last_update | formatTimestamp }}">{{ friend.last_update | toRelative }}</span></td>
             </tr>
         </tbody>
     </table>

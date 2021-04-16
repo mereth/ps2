@@ -125,9 +125,9 @@ angular
             if (deaths == 0) deaths = 1;
             if (time == 0) time = 1;
 
-            stats2.kdr[period] = (kills / deaths).toFixed(2);
-            stats2.spm[period] = (score / time).toFixed(0);
-            stats2.kpm[period] = (kills / time).toFixed(2);
+            stats2.kdr[period] = Math.round((kills / deaths) * 100) / 100;
+            stats2.spm[period] = Math.round(score / time);
+            stats2.kpm[period] = Math.round((kills / time) * 100) / 100;
         }
 
         return stats2;

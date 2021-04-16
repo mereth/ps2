@@ -3,8 +3,8 @@
   "title": "ps2",
   "version": "1.0.0",
   "scripts": {
-    "publish": "webpack --mode=production",
-    "serve": "webpack serve --mode=development"
+    "start": "webpack serve --mode=development",
+    "publish": "webpack --mode=production"
   },
   "devDependencies": {
     "copy-webpack-plugin": "^8.1.0",
@@ -16,6 +16,7 @@
     "webpack-dev-server": "^3.11.2"
   },
   "dependencies": {
+    "ag-grid-community": "^25.1.0",
     "angular": "^1.8.2",
     "angular-route": "^1.8.2",
     "bootstrap": "^3.4.1",

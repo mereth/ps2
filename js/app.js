@@ -3,6 +3,8 @@ const angular = require('angular');
 require('angular-route');
 
 require('bootstrap/dist/css/bootstrap.min.css');
+require('ag-grid-community/dist/styles/ag-grid.css');
+require('ag-grid-community/dist/styles/ag-theme-alpine.css');
 require('../styles.css');
 
 var ps2App = angular.module('ps2App', ['ngRoute', 'ps2Controllers']);

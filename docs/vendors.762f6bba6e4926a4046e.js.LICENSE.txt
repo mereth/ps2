@@ -1,0 +1,20 @@
+/**
+ * @ag-grid-community/core - Advanced Data Grid / Data Table supporting Javascript / React / AngularJS / Web Components
+ * @version v25.1.0
+ * @link http://www.ag-grid.com/
+ * @license MIT
+ */
+
+/**
+ * @license AngularJS v1.8.2
+ * (c) 2010-2020 Google LLC. http://angularjs.org
+ * License: MIT
+ */
+
+/**
+ * ag-grid-community - Advanced Data Grid / Data Table supporting Javascript / React / AngularJS / Web Components * @version v25.1.0
+ * @link http://www.ag-grid.com/
+' * @license MIT
+ */
+
+/*@cc_on!@*/
