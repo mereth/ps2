@@ -1,14 +1,14 @@
 angular
 .module('character', ['ps2Utils'])
 .factory('character', ['$q', '$http', 'ps2Utils', function($q, $http, ps2Utils) {
-    var CHARACTER_URL = "http://census.daybreakgames.com/s:mereth/get/ps2:v2/character/?";
+    var CHARACTER_URL = "https://census.daybreakgames.com/s:mereth/get/ps2:v2/character/?";
     CHARACTER_URL += "c:join=characters_stat_history^list:1^inject_at:characters_stat_history";
     CHARACTER_URL += "&c:tree=start:characters_stat_history^field:stat_name";
     CHARACTER_URL += "&c:join=outfit_member^on:character_id^inject_at:outfit_member(outfit^inject_at:outfit)";
     CHARACTER_URL += "&c:join=characters_online_status^on:character_id^inject_at:characters_online_status^show:online_status";
     CHARACTER_URL += "&c:join=faction^inject_at:faction^show:image_path'code_tag";
 
-    var KILLBOARD_URL = "http://census.daybreakgames.com/s:mereth/get/ps2:v2/characters_event/?type=KILL,DEATH";
+    var KILLBOARD_URL = "https://census.daybreakgames.com/s:mereth/get/ps2:v2/characters_event/?type=KILL,DEATH";
     KILLBOARD_URL += "&c:join=character^show:character_id'name.first'battle_rank.value'faction_id^inject_at:character";
     KILLBOARD_URL += "(";
     KILLBOARD_URL += "characters_stat_history^on:character_id^terms:stat_name=kills^show:all_time'week.w01'week.w02^inject_at:stat_kills";
@@ -28,7 +28,7 @@ angular
     KILLBOARD_URL += "&c:join=item^on:attacker_weapon_id^to:item_id^show:name.en'image_path^inject_at:attacker_weapon";
     KILLBOARD_URL += "&c:join=vehicle^on:attacker_vehicle_id^to:vehicle_id^show:name.en'image_path^inject_at:attacker_vehicle";
 
-    var FRIENDS_URL = "http://census.daybreakgames.com/s:mereth/get/ps2:v2/characters_friend?"
+    var FRIENDS_URL = "https://census.daybreakgames.com/s:mereth/get/ps2:v2/characters_friend?"
     FRIENDS_URL += "c:join=character^on:friend_list.character_id^to:character_id^inject_at:character"
     FRIENDS_URL += "(";
     FRIENDS_URL += "characters_stat_history^on:character_id^inject_at:characters_stat_history^list:1"

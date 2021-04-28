@@ -147,6 +147,28 @@ angular
     });
 }])
 
+.controller('outfitOnlineController', ['$scope', '$rootScope', '$routeParams', 'outfit', function($scope, $rootScope, $routeParams, outfit) {
+    $scope.outfit_id = $routeParams.id;
+    $scope.members = [];
+    $scope.loading = true;
+    outfit.getOnlineMembers($scope.outfit_id).then(function(members) {
+        $scope.members = members.sort(function (a, b) { return a.name.localeCompare(b.name) });
+        $scope.lastRefresh = new Date();
+        $scope.loading = false;
+    })
+
+    var intervalId = setInterval(function() {
+        outfit.getOnlineMembers($scope.outfit_id).then(function(members) {
+            $scope.members = members.sort(function (a, b) { return a.name.localeCompare(b.name) });
+            $scope.lastRefresh = new Date();
+        })
+    }, 5 * 60 * 1000);
+
+    $scope.$on('$destroy', function() {
+        clearInterval(intervalId);
+    });
+}])
+
 .controller('characterController', ['$scope', '$rootScope', '$routeParams', '$document', 'character', function($scope, $rootScope, $routeParams, $document, character) {
     var id = $routeParams.id;
 

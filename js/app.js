@@ -20,6 +20,10 @@ ps2App.config(['$routeProvider', function($routeProvider) {
         template: require('../pages/outfit.html'),
         controller: 'outfitController'
     })
+    .when('/outfit/:id/online', {
+        template: require('../pages/outfit-online.html'),
+        controller: 'outfitOnlineController'
+    })
     .when('/character/:id', {
         template : require('../pages/character.html'),
         controller: 'characterController'

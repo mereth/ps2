@@ -1,0 +1,30 @@
+<style>
+body {
+    font-size: 20px;
+}
+.member {
+    background-color: #5cb85c;
+    border-radius: 10px;
+    height: 60px;
+    margin: 5px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+}
+</style>
+<div class="container-fluid" ng-if="!loading">
+    <div class="row" ng-repeat="member in members">
+        <div class="col-md-6 col-md-offset-3">
+            <div class="member ">{{ member.name }}</div>
+        </div>
+    </div>
+    <div class="row text-right">
+        <div class="col-md-6 col-md-offset-3 text-right" style="font-size: 0.8em;">
+            {{ lastRefresh | date:'HH:mm:ss' }}
+        </div>
+    </div>
+    <div class="row text-center">
+        <a href="#/outfit/{{ outfit_id }}">Back</a>
+    </div>
+</div>

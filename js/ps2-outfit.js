@@ -1,15 +1,18 @@
 angular
 .module('outfit', ['ps2Utils'])
 .factory('outfit', ['$q', '$http', 'ps2Utils', function($q, $http, ps2Utils) {
-    var OUTFIT_URL = "http://census.daybreakgames.com/s:mereth/get/ps2:v2/outfit/?";
+    var OUTFIT_URL = "https://census.daybreakgames.com/s:mereth/get/ps2:v2/outfit/?";
     OUTFIT_URL += "c:join=character^on:leader_character_id^to:character_id^inject_at:leader";
 
-    var MEMBERS_URL = "http://census.daybreakgames.com/s:mereth/get/ps2:v2/outfit_member/?";
+    var MEMBERS_URL = "https://census.daybreakgames.com/s:mereth/get/ps2:v2/outfit_member/?";
     MEMBERS_URL += "c:join=character^on:character_id^inject_at:character";
     MEMBERS_URL += "&c:join=characters_online_status^on:character_id^inject_at:characters_online_status^show:online_status";
 
-    var MEMBERS_STATS_URL = "http://census.daybreakgames.com/s:mereth/get/ps2:v2/outfit_member/?";
+    var MEMBERS_STATS_URL = "https://census.daybreakgames.com/s:mereth/get/ps2:v2/outfit_member/?";
     MEMBERS_STATS_URL += "&c:join=characters_stat_history^on:character_id^inject_at:characters_stat_history^list:1";
+
+    var MEMBERS_ONLINE_URL = "https://census.daybreakgames.com/s:mereth/get/ps2:v2/outfit_member/?";
+    MEMBERS_ONLINE_URL += "c:resolve=online_status,character_name";
 
     var LIMIT = 2000;
     var LIMIT_STATS = 1000;
@@ -120,6 +123,33 @@ angular
             .then(function(response) {
                 var data = response.data;
                 var members = processMembersData(data);
+                deferred.resolve(members);
+            })
+            .catch(function(response) {
+                deferred.reject(response.data || "Request failed");
+            });
+            
+            return deferred.promise;
+        }
+        ,getOnlineMembers: function(id) {
+            var deferred = $q.defer();
+            
+            $http
+            .get(MEMBERS_ONLINE_URL, { params: { outfit_id: id, "c:limit": LIMIT } })
+            .then(function(response) {
+                var members = [];
+
+                if (response.data && response.data.outfit_member_list) {
+                    var outfit_member_list = response.data.outfit_member_list;
+
+                    members = outfit_member_list
+                        .filter(m => m.online_status !== "0")
+                        .map(m => ({
+                            character_id: m.character_id,
+                            name: m.character.name.first,
+                        }));
+                }
+
                 deferred.resolve(members);
             })
             .catch(function(response) {
