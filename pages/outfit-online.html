@@ -2,29 +2,62 @@
 body {
     font-size: 20px;
 }
-.member {
-    background-color: #5cb85c;
-    border-radius: 10px;
+.block {
     height: 60px;
     margin: 5px 0;
     display: flex;
     justify-content: center;
     align-items: center;
+}
+.loading {
+    font-size: 2em;
+}
+.loading span {
+    animation: spin-animation 0.5s infinite;
+}
+.online-member {
+    background-color: #5cb85c;
+    border-radius: 10px;
     color: white;
 }
+.no-online-members {
+    background-color: #777;
+    border-radius: 10px;
+    color: white;
+}
+@keyframes spin-animation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(359deg);
+  }
+}
 </style>
-<div class="container-fluid" ng-if="!loading">
-    <div class="row" ng-repeat="member in members">
-        <div class="col-md-6 col-md-offset-3">
-            <div class="member ">{{ member.name }}</div>
+<div class="container-fluid">
+    <div class="row text-center" ng-if="loading">
+        <div class="block loading">
+            <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
         </div>
     </div>
-    <div class="row text-right">
+    <div class="row" ng-repeat="member in members" ng-if="!loading && members.length">
+        <div class="col-md-6 col-md-offset-3">
+            <div class="block online-member">{{ member.name }}</div>
+        </div>
+    </div>
+    <div class="row" ng-if="!loading && !members.length">
+        <div class="col-md-6 col-md-offset-3">
+            <div class="block no-online-members">No one is online ಥ_ಥ</div>
+        </div>
+    </div>
+    <div class="row text-right" ng-if="!loading">
         <div class="col-md-6 col-md-offset-3 text-right" style="font-size: 0.8em;">
             {{ lastRefresh | date:'HH:mm:ss' }}
         </div>
     </div>
     <div class="row text-center">
-        <a href="#/outfit/{{ outfit_id }}">Back</a>
+        <div class="block">
+            <a href="#/outfit/{{ outfit_id }}">Back</a>
+        </div>
     </div>
 </div>

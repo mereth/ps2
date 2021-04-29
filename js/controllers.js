@@ -151,6 +151,7 @@ angular
     $scope.outfit_id = $routeParams.id;
     $scope.members = [];
     $scope.loading = true;
+
     outfit.getOnlineMembers($scope.outfit_id).then(function(members) {
         $scope.members = members.sort(function (a, b) { return a.name.localeCompare(b.name) });
         $scope.lastRefresh = new Date();
