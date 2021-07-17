@@ -109,11 +109,13 @@ angular
 
             model.faction = "";
             if(character) {
+                
                 var faction = ps2Utils.getFaction(character.faction_id);
                 model.faction = faction.factionTag;
 
                 model.character_id = character.character_id;
                 model.name = character.name.first;
+    
                 model.rank = character.stat_score ? ps2Utils.getComputedRank(character.stat_score.all_time) : 'N/A';
 
                 if(character.outfit && character.outfit.details) {
@@ -134,14 +136,15 @@ angular
                 model.kd = ratio(character.stat_kills, character.stat_deaths).toFixed(2);
                 model.spm = (ratio(character.stat_score, character.stat_time) * 60).toFixed(0);
                 model.kpm = (ratio(character.stat_kills, character.stat_time) * 60).toFixed(2);
+
             }
 
             if(event.attacker_weapon) {
-                model.weapon = event.attacker_weapon.name.en;
+                model.weapon = event.attacker_weapon.name ? event.attacker_weapon.name.en : "???";
             }
 
             if(event.attacker_vehicle) {
-                model.vehicle = event.attacker_vehicle.name.en;
+                model.vehicle = event.attacker_vehicle.name ? event.attacker_vehicle.name.en : "???!";
                 if(model.weapon === model.vehicle) {
                     delete model.vehicle;
                 }
